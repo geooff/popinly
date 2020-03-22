@@ -71,7 +71,7 @@ def init_env(kwargs):
     # Add Packages
     doc.packages.append(Package("textcomp"))
     doc.packages.append(Package("xcolor", ["x11names"]))
-
+    doc.append(NoEscape(r"\pagenumbering{gobble}"))
     doc.preamble.append(
         NoEscape(r"\newcommand*\wb[3]{{\fontsize{#1}{#2}\usefont{U}{webo}{xl}{n}#3}}")
     )
@@ -122,14 +122,34 @@ def fill_pageframe(doc):
         )
 
 
-def fill_document(doc):
+def fill_document(environmentdoc):
     with doc.create(menuSection(arguments=Arguments("Meat"))) as environment:
-        environment.append(menuEntry(arguments=Arguments("Steak", "$12")))
-        environment.append(menuSubEntry(arguments=Arguments("Delicious Steak")))
+        environment.append(menuEntry(arguments=Arguments("Steak au Povre", "$12")))
+        environment.append(NoEscape(r"\\"))
+        environment.append(
+            menuSubEntry(arguments=Arguments("Delicious Steak with pepper sause"))
+        )
+        doc.append(NoEscape(r"\\"))
+        environment.append(menuEntry(arguments=Arguments("Beef tartar", "$8")))
+        environment.append(NoEscape(r"\\"))
+        environment.append(
+            menuSubEntry(arguments=Arguments("Raw beef serve with a raw egg"))
+        )
+        doc.append(NoEscape(r"\\"))
+        environment.append(menuEntry(arguments=Arguments("Beef burgenion", "$12")))
+        environment.append(NoEscape(r"\\"))
+        environment.append(menuSubEntry(arguments=Arguments("I spelt this one wrong")))
+        doc.append(NoEscape(r"\\"))
     doc.append(NoEscape(r"\vfill"))
-    with doc.create(menuSection(arguments=Arguments("Meat"))) as environment:
-        environment.append(menuEntry(arguments=Arguments("Steak", "$12")))
-        environment.append(menuSubEntry(arguments=Arguments("Delicious Steak")))
+    with doc.create(menuSection(arguments=Arguments("Pasta"))) as environment:
+        environment.append(
+            menuEntry(arguments=Arguments("Spagetti and Meatballs", "$12"))
+        )
+        environment.append(NoEscape(r"\\"))
+        environment.append(
+            menuSubEntry(arguments=Arguments("Spagetti served with a rich meatsause"))
+        )
+        environment.append(NoEscape(r"\\"))
 
 
 if __name__ == "__main__":
