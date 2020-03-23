@@ -68,10 +68,17 @@ def init_env(kwargs):
     # Pass in document key-word parameters (page_type, font, ect)
     doc = Document(**document_params)
 
-    # Add Packages
+    # Add Packages for text styling
     doc.packages.append(Package("textcomp"))
     doc.packages.append(Package("xcolor", ["x11names"]))
+
+    # Add Packages for border
+    doc.packages.append(Package("pgfornament", ["object=vectorian"]))
+    doc.packages.append(Package(NoEscape("eso-pic")))
+
+    # Remove Pagenumbering
     doc.append(NoEscape(r"\pagenumbering{gobble}"))
+
     doc.preamble.append(
         NoEscape(r"\newcommand*\wb[3]{{\fontsize{#1}{#2}\usefont{U}{webo}{xl}{n}#3}}")
     )
@@ -115,11 +122,32 @@ def init_env(kwargs):
 
 def fill_pageframe(doc):
     # add our sample drawings
-    with doc.create(TikZ()) as pic:
-        # options for our node
-        pic.append(
-            TikZNode([TikZCoordinate(0.5, 0), "rectangle", TikZCoordinate(2, -8)],)
+    doc.append(NoEscape(r"\makeatletter"))
+    doc.append(NoEscape(r"\AddToShipoutPicture{"))
+    doc.append(NoEscape(r"\begingroup"))
+    doc.append(
+        NoEscape(
+            r"\setlength{\@tempdima}{2mm}% \setlength{\@tempdimb}{\paperwidth-\@tempdima-2cm}% \setlength{\@tempdimc}{\paperheight-\@tempdima}% \put(\LenToUnit{\@tempdima},\LenToUnit{\@tempdimc}){"
         )
+    )
+    doc.append(
+        NoEscape(
+            r"\pgfornament[anchor=north west,width=2cm]{63}} \put(\LenToUnit{\@tempdima},\LenToUnit{\@tempdima}){"
+        )
+    )
+    doc.append(
+        NoEscape(
+            r"\pgfornament[anchor=south west,width=2cm,symmetry=h]{63}} \put(\LenToUnit{\@tempdimb},\LenToUnit{\@tempdimc}){"
+        )
+    )
+    doc.append(
+        NoEscape(
+            r"\pgfornament[anchor=north east,width=2cm,symmetry=v]{63}} \put(\LenToUnit{\@tempdimb},\LenToUnit{\@tempdima}){"
+        )
+    )
+    doc.append(NoEscape(r"\endgroup"))
+    doc.append(NoEscape(r"}"))
+    doc.append(NoEscape(r"\makeatother"))
 
 
 def fill_document(environmentdoc):
@@ -161,7 +189,7 @@ if __name__ == "__main__":
     }
     # Basic document
     doc = init_env(document_params)
-    # fill_pageframe(doc)
+    fill_pageframe(doc)
     fill_document(doc)
 
     doc.generate_pdf(clean=True, clean_tex=False)
