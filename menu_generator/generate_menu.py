@@ -125,24 +125,27 @@ def fill_pageframe(doc):
     doc.append(NoEscape(r"\makeatletter"))
     doc.append(NoEscape(r"\AddToShipoutPicture{"))
     doc.append(NoEscape(r"\begingroup"))
+    doc.append(NoEscape(r"\setlength{\@tempdima}{2mm}"))
+    doc.append(NoEscape(r"\setlength{\@tempdimb}{\paperwidth-\@tempdima-2cm}"))
+    doc.append(NoEscape(r"\setlength{\@tempdimc}{\paperheight-\@tempdima}"))
     doc.append(
         NoEscape(
-            r"\setlength{\@tempdima}{2mm}% \setlength{\@tempdimb}{\paperwidth-\@tempdima-2cm}% \setlength{\@tempdimc}{\paperheight-\@tempdima}% \put(\LenToUnit{\@tempdima},\LenToUnit{\@tempdimc}){"
+            r"\put(\LenToUnit{\@tempdima},\LenToUnit{\@tempdimc}){\pgfornament[anchor=north west,width=2cm]{63}}"
         )
     )
     doc.append(
         NoEscape(
-            r"\pgfornament[anchor=north west,width=2cm]{63}} \put(\LenToUnit{\@tempdima},\LenToUnit{\@tempdima}){"
+            r"\put(\LenToUnit{\@tempdima},\LenToUnit{\@tempdima}){\pgfornament[anchor=south west,width=2cm,symmetry=h]{63}}"
         )
     )
     doc.append(
         NoEscape(
-            r"\pgfornament[anchor=south west,width=2cm,symmetry=h]{63}} \put(\LenToUnit{\@tempdimb},\LenToUnit{\@tempdimc}){"
+            r"\put(\LenToUnit{\@tempdimb},\LenToUnit{\@tempdimc}){\pgfornament[anchor=north east,width=2cm,symmetry=v]{63}}"
         )
     )
     doc.append(
         NoEscape(
-            r"\pgfornament[anchor=north east,width=2cm,symmetry=v]{63}} \put(\LenToUnit{\@tempdimb},\LenToUnit{\@tempdima}){"
+            r"\put(\LenToUnit{\@tempdimb},\LenToUnit{\@tempdima}){\pgfornament[anchor=south east,width=2cm,symmetry=c]{63}}"
         )
     )
     doc.append(NoEscape(r"\endgroup"))
