@@ -1,3 +1,9 @@
 # Ignore folders
 .env/
 .vscode/
+
+# Ignore this shit
+.DS_Store
+
+# Ignore build files
+*.pyc
