@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Editing Menu</h1>
+  <form method="POST">
+  {% csrf_token %}
+  {{ formset.as_p }}
+  <button type="submit">Save</button>
+  </form>
+{% endblock %}
