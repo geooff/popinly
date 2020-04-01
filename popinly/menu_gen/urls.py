@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.index, name="generator_index"),
-    path("create/<menu_id>", views.create_menu, name="create_menu"),
+    path("", views.index, name="index"),
+    path("menu/add/", views.MenuCreateView.as_view(), name="menu_add"),
+    path("menu/edit/<menu_id>", views.MenuItemsUpdateView, name="menu_edit"),
 ]
