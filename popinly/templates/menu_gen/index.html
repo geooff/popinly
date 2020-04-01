@@ -2,15 +2,19 @@
 
 {% block content %}
   <h1>Welcome to the menu generator page!</h1>
-
-  {% if user_menus %}
-    <ul>
-    <p>Select a menu to edit!</p>
-    {% for menu in user_menus %}
-      <li><a href="{% url 'create_menu' menu.menu_id  %}">Edit Menu: {{ menu.menu_title }}</a></li>
-    {% endfor %}
-    </ul>
-  {% else %}
-    <p>No menus available to edit.</p>
+  <ul>
+  <a href="{% url 'menu_add' %}">Create a menu!</a>
+  </ul>
+  {% if user.is_authenticated %}
+    {% if user_menus %}
+      <ul>
+      <p>Select a menu to edit!</p>
+      {% for menu in user_menus %}
+        <li><a href="{% url 'menu_edit' menu.menu_id  %}">Edit Menu: {{ menu.menu_title }}</a></li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>No menus available to edit.</p>
+    {% endif %}
   {% endif %}
 {% endblock %}
