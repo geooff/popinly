@@ -10,7 +10,7 @@
       <ul>
       <p>Select a menu to edit!</p>
       {% for menu in user_menus %}
-        <li><a href="{% url 'menu_edit' menu.menu_id  %}">Edit Menu: {{ menu.menu_title }}</a></li>
+        <li><a href="{{ menu.get_absolute_url }}">{{ menu.title }}</a>
       {% endfor %}
       </ul>
     {% else %}
