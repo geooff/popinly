@@ -18,12 +18,16 @@ from .forms import MenuSectionsItemsFormset
 from .models import Menu, MenuSection, MenuItem
 
 
-def index(request):
-    context = {}
-    if request.user.is_authenticated:
-        user_menus = Menu.objects.filter(author__exact=request.user)
-        context = {"user_menus": user_menus}
-    return render(request, "menu_gen/index.html", context)
+class MenuListView(ListView):
+    model = Menu
+    context_object_name = "user_menus"
+    template_name = "menu_gen/index.html"
+
+    def get_queryset(self):
+        # Add try except to handle non-loggedin users
+        queryset = super(MenuListView, self).get_queryset()
+        queryset = queryset.filter(author__exact=self.request.user)
+        return queryset
 
 
 class MenuCreateView(CreateView):
@@ -42,10 +46,12 @@ class MenuCreateView(CreateView):
 
     # TODO: Extend view to use current user as author and restaurant_name as dropdown of resturaunts
 
+    def get_success_url(self):
+        # return reverse("menu_edit", kwargs={"menu_id": self.object.pk})
+        return reverse("menu_edit", kwargs={"pk": self.object.pk})
+
     def form_valid(self, form):
-
         messages.add_message(self.request, messages.SUCCESS, "The menu was added.")
-
         return super().form_valid(form)
 
 

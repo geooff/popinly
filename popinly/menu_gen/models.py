@@ -2,6 +2,7 @@ from uuid import uuid4
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 
 class Menu(models.Model):
@@ -12,7 +13,10 @@ class Menu(models.Model):
     created_at = models.DateField(default=timezone.now)
 
     def __str__(self):
-        return self.menu_title
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("menu_edit", kwargs={"pk": self.pk})
 
 
 class MenuSection(models.Model):
