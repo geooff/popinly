@@ -1,10 +1,81 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+
   <h1>Editing Menu</h1>
+
   <form method="POST">
-  {% csrf_token %}
-  {{ formset.as_p }}
-  <button type="submit">Save</button>
+    {% for hidden_field in form.hidden_fields %}
+      {{ hidden_field.errors }}
+      {{ hidden_field }}
+    {% endfor %}
+
+    {% csrf_token %}
+    
+    {{ form.management_form }}
+    {{ form.non_form_errors }}
+
+    {% for menu_section_form in form.forms %}
+
+      <hr>
+
+      <h2>
+        {% if menu_section.instance.id %}
+          Book #{{ menu_section.instance.id }}</h2>
+        {% else %}
+          {% if form.forms|length > 1 %}
+            Add another Menu Section
+          {% else %}
+            Add a Menu Section
+          {% endif %}
+        {% endif %}
+      </h2>
+
+      {% for hidden_field in menu_section_form.hidden_fields %}
+        {{ hidden_field.errors }}
+      {% endfor %}
+
+      <table>
+        {{ menu_section_form.as_table }}
+      </table>
+
+      {% if menu_section_form.nested %}
+        <div class="indent">
+
+          <h3>Items</h3>
+
+          {{ menu_section_form.nested.management_form }}
+          {{ menu_section_form.nested.non_form_errors }}
+
+          <table>
+            {% for menu_item_form in menu_section_form.nested.forms %}
+              <tr>
+                <td>
+                  <em>
+                    {% if menu_item_form.instance.id %}
+                      Menu Item {{ menu_item_form.instance.id }}
+                    {% else %}
+                      Add a Menu Item
+                    {% endif %}
+                  </em>
+                </td>
+                <td>
+                  {% for hidden_field in menu_item_form.hidden_fields %}
+                    {{ hidden_field.errors }}
+                  {% endfor %}
+
+                  <table>
+                    {{ menu_item_form.as_table }}
+                  </table>
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      {% endif %}
+
+    {% endfor %}
+
+  <button type="submit">Update Menu</button>
   </form>
 {% endblock %}

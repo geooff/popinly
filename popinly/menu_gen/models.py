@@ -15,9 +15,6 @@ class Menu(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse("menu_edit", kwargs={"pk": self.pk})
-
 
 class MenuSection(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
