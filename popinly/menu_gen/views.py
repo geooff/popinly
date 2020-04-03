@@ -101,4 +101,4 @@ class MenuItemsUpdateView(SingleObjectMixin, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse("menu_index")
+        return reverse("menu_edit", kwargs={"pk": self.object.pk})
