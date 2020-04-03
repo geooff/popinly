@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic import (
@@ -12,6 +12,7 @@ from django.views.generic import (
     FormView,
     ListView,
     TemplateView,
+    DeleteView,
 )
 
 from .forms import MenuSectionsItemsFormset
@@ -47,12 +48,22 @@ class MenuCreateView(CreateView):
     # TODO: Extend view to use current user as author and restaurant_name as dropdown of resturaunts
 
     def get_success_url(self):
-        # return reverse("menu_edit", kwargs={"menu_id": self.object.pk})
         return reverse("menu_edit", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, "The menu was added.")
         return super().form_valid(form)
+
+
+class MenuDelete(DeleteView):
+    model = Menu
+    template_name = "menu_gen/menu_confirm_delete.html"
+    context_object_name = "menu"
+
+    def get_success_url(self):
+        return reverse("menu_index")
+
+    # TODO: Add logic to make sure only owner of object can delete
 
 
 class MenuItemsUpdateView(SingleObjectMixin, FormView):
@@ -69,7 +80,7 @@ class MenuItemsUpdateView(SingleObjectMixin, FormView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # The Menu we're uploading for:
+        # The Menu we're adding items for:
         self.object = self.get_object(queryset=Menu.objects.all())
         return super().post(request, *args, **kwargs)
 
@@ -90,56 +101,4 @@ class MenuItemsUpdateView(SingleObjectMixin, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse("books:publisher_detail", kwargs={"pk": self.object.pk})
-
-
-# def create_menu(request, menu_id):
-#     menu = Menu.objects.get(pk=menu_id)
-#     MenuFormset = inlineformset_factory(
-#         Menu,
-#         MenuItem,
-#         fields=["item_name", "item_description", "item_price"],
-#         extra=1,
-#         can_order=True,
-#         can_delete=True,
-#         min_num=1,
-#     )
-
-#     if request.method == "POST":
-#         formset = MenuFormset(request.POST, instance=menu)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect("create_menu", menu_id=menu.menu_id)
-
-#     formset = MenuFormset(instance=menu)
-#     return render(request, "menu_gen/edit_menu.html", {"formset": formset})
-
-
-# def create_menu(request, menu_id):
-#     menu = Menu.objects.get(pk=menu_id)
-#     MenuFormset = inlineformset_factory(
-#         Menu,
-#         MenuItem,
-#         fields=["item_name", "item_description", "item_price"],
-#         extra=1,
-#         can_order=True,
-#         can_delete=True,
-#         min_num=1,
-#     )
-
-#     if request.method == "POST":
-#         formset = MenuFormset(request.POST, instance=menu)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect("create_menu", menu_id=menu.menu_id)
-
-#     formset = MenuFormset(instance=menu)
-#     return render(request, "menu_gen/edit_menu.html", {"formset": formset})
-
-
-# def generate_menu(request):
-#     # TODO: call the pdf menu generator here, something like make_latex_menu()
-#     # Function should return the directory the file is saved in, file loc will be used in file response
-#     return FileResponse(
-#         open("myfile.png", "rb"), as_attachment=True, filename="menu.pdf"
-#     )
+        return reverse("menu_index")
