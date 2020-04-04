@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+  <h1>Previewing your menu: {{ menu.title }}</h1>
+  <div class="header">
+    <h1>{{ menu.restaurant_name }}</h1>
+    <br>
+    <h1>{{ menu.title }}</h1>
+  </div>
+  {% for section in menu.menusection_set.all %}
+    <div class="menu_section">
+      <h2>{{ section.name }}</h2>
+      <p>{{ section.description }}</p>
+    </div>
+    {% for item in section.menuitem_set.all %}
+    <div class="menu_item">
+      <h3>{{ item.name }}</h3>
+      <p>{{ item.price }}</p>
+      <p>{{ item.description }}</p>
+    </div>
+    {% endfor %}
+  {% endfor %}
+
+  
+{% endblock %}

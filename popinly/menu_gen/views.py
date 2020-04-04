@@ -102,3 +102,16 @@ class MenuItemsUpdateView(SingleObjectMixin, FormView):
 
     def get_success_url(self):
         return reverse("menu_edit", kwargs={"pk": self.object.pk})
+
+
+class MenuDetailView(DetailView):
+
+    model = Menu
+    template_name = "menu_gen/menu_detail.html"
+    context_object_name = "menu"
+
+    def get_queryset(self):
+        # Add try except to handle non-loggedin users
+        queryset = super(MenuDetailView, self).get_queryset()
+        queryset = queryset.filter(author__exact=self.request.user)
+        return queryset
