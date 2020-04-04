@@ -2,18 +2,28 @@
 
 {% block content %}
   <h1>Welcome to the menu generator page!</h1>
-  <ul>
-  <a href="{% url 'menu_add' %}">Create a menu!</a>
-  </ul>
   {% if user.is_authenticated %}
     {% if user_menus %}
-      <ul>
-      <p>Select a menu to edit!</p>
-      {% for menu in user_menus %}
-        <li><a href="{% url 'menu_edit' menu.uuid %}">Edit: {{ menu.title }}</a>
-        <li><a href="{% url 'menu_delete' menu.uuid %}">Delete: {{ menu.title }}</a>
-      {% endfor %}
-      </ul>
+      <h2>Select a menu to edit!</h2>
+      <a href="{% url 'menu_add' %}">Create a new menu!</a>
+      <div class="container">
+        {% for menu in user_menus %}
+          <div class="row">
+            <div class="col">
+              {{ menu.title }} 
+            </div>
+            <div class="col">
+              <a href="{% url 'menu_detail' menu.uuid %}">View</a> 
+            </div>
+            <div class="col">
+              <a href="{% url 'menu_edit' menu.uuid %}">Edit</a>
+            </div>
+            <div class="col">
+              <a href="{% url 'menu_delete' menu.uuid %}">Delete</a>
+            </div>            
+          </div>
+        {% endfor %}
+      </div>
     {% else %}
       <p>No menus available to edit.</p>
     {% endif %}
