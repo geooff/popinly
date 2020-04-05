@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
 from django.urls import reverse, reverse_lazy
@@ -19,7 +20,7 @@ from .forms import MenuSectionsItemsFormset
 from .models import Menu, MenuSection, MenuItem
 
 
-class MenuListView(ListView):
+class MenuListView(LoginRequiredMixin, ListView):
     model = Menu
     context_object_name = "user_menus"
     template_name = "menu_gen/index.html"
@@ -31,7 +32,7 @@ class MenuListView(ListView):
         return queryset
 
 
-class MenuCreateView(CreateView):
+class MenuCreateView(LoginRequiredMixin, CreateView):
     """
     Only for creating a new menu. Adding items to it is done in the
     MenuItemsUpdateView().
@@ -48,25 +49,25 @@ class MenuCreateView(CreateView):
     # TODO: Extend view to use current user as author and restaurant_name as dropdown of resturaunts
 
     def get_success_url(self):
-        return reverse("menu_edit", kwargs={"pk": self.object.pk})
+        return reverse("menu_gen:edit", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, "The menu was added.")
         return super().form_valid(form)
 
 
-class MenuDelete(DeleteView):
+class MenuDelete(LoginRequiredMixin, DeleteView):
     model = Menu
     template_name = "menu_gen/menu_confirm_delete.html"
     context_object_name = "menu"
 
     def get_success_url(self):
-        return reverse("menu_index")
+        return reverse("menu_gen:index")
 
     # TODO: Add logic to make sure only owner of object can delete
 
 
-class MenuItemsUpdateView(SingleObjectMixin, FormView):
+class MenuItemsUpdateView(LoginRequiredMixin, SingleObjectMixin, FormView):
     """
     For adding sections to a menu, or editing them.
     """
@@ -101,10 +102,10 @@ class MenuItemsUpdateView(SingleObjectMixin, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse("menu_edit", kwargs={"pk": self.object.pk})
+        return reverse("menu_gen:edit", kwargs={"pk": self.object.pk})
 
 
-class MenuDetailView(DetailView):
+class MenuDetailView(LoginRequiredMixin, DetailView):
 
     model = Menu
     template_name = "menu_gen/menu_detail.html"
