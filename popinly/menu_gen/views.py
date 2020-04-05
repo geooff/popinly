@@ -19,6 +19,8 @@ from django.views.generic import (
 from .forms import MenuSectionsItemsFormset
 from .models import Menu, MenuSection, MenuItem
 
+from django_weasyprint import WeasyTemplateResponseMixin
+
 
 class MenuListView(LoginRequiredMixin, ListView):
     model = Menu
@@ -111,8 +113,26 @@ class MenuDetailView(LoginRequiredMixin, DetailView):
     template_name = "menu_gen/menu_detail.html"
     context_object_name = "menu"
 
+    # TODO: Add support for promatically passing in css files for preview
+
     def get_queryset(self):
-        # Add try except to handle non-loggedin users
         queryset = super(MenuDetailView, self).get_queryset()
         queryset = queryset.filter(author__exact=self.request.user)
         return queryset
+
+
+class MenuPDFView(WeasyTemplateResponseMixin, MenuDetailView):
+    # output of MyModelView rendered as PDF with hardcoded CSS
+    # pdf_stylesheets = [
+    #     settings.STATIC_ROOT + 'css/app.css',
+    # ]
+    # show pdf in-line (default: True, show download dialog)
+    pdf_attachment = False
+    # suggested filename (is required for attachment!)
+    pdf_filename = "menu.pdf"
+    export_template = "base_export.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(MenuPDFView, self).get_context_data(**kwargs)
+        context.update({"override_base": self.export_template})
+        return context
