@@ -3,9 +3,9 @@
 {% block content %}
   <h1>Welcome to the menu generator page!</h1>
   {% if user.is_authenticated %}
+    <a href="{% url 'menu_gen:add' %}">Create a new menu!</a>
+    <h2>Select a menu to edit!</h2>
     {% if user_menus %}
-      <h2>Select a menu to edit!</h2>
-      <a href="{% url 'menu_add' %}">Create a new menu!</a>
       <div class="container">
         {% for menu in user_menus %}
           <div class="row">
@@ -13,13 +13,13 @@
               {{ menu.title }} 
             </div>
             <div class="col">
-              <a href="{% url 'menu_detail' menu.uuid %}">View</a> 
+              <a href="{% url 'menu_gen:detail' menu.uuid %}">View</a> 
             </div>
             <div class="col">
-              <a href="{% url 'menu_edit' menu.uuid %}">Edit</a>
+              <a href="{% url 'menu_gen:edit' menu.uuid %}">Edit</a>
             </div>
             <div class="col">
-              <a href="{% url 'menu_delete' menu.uuid %}">Delete</a>
+              <a href="{% url 'menu_gen:delete' menu.uuid %}">Delete</a>
             </div>            
           </div>
         {% endfor %}
