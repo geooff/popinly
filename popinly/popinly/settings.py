@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [
@@ -120,3 +121,6 @@ STATICFILES_DIRS = [
 
 # Login Settings
 LOGIN_REDIRECT_URL = "/"
+
+# Settings for Crispy Forms
+CRISPY_TEMPLATE_PACK = "bootstrap4"
