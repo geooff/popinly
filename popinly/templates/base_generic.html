@@ -12,7 +12,8 @@
     {% block title %}<title>Popinly</title>{% endblock %}
   </head>
 <body>
-{% block navbar %}
+  <!-- Page Navbar -->
+  {% block navbar %}
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
       <h5 class="my-0 mr-md-auto font-weight-normal">
         <a href="{% url 'index' %}">Popinly</a>
@@ -28,7 +29,7 @@
           <a class="btn btn-outline-primary" href="{% url 'register'%}?next={{request.path}}">Register</a>
       {% endif %}
     </div>
-    {% endblock %}
+  {% endblock %}
    
     <!-- The actual content of the page -->
     <main role="main" class="container">

@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
 from django.urls import reverse, reverse_lazy
 
@@ -27,8 +28,8 @@ class MenuListView(LoginRequiredMixin, ListView):
     context_object_name = "user_menus"
     template_name = "menu_gen/index.html"
 
+    # Make sure object can only be viewed by object owner
     def get_queryset(self):
-        # Add try except to handle non-loggedin users
         queryset = super(MenuListView, self).get_queryset()
         queryset = queryset.filter(author__exact=self.request.user)
         return queryset
@@ -96,9 +97,7 @@ class MenuItemsUpdateView(LoginRequiredMixin, SingleObjectMixin, FormView):
         If the form is valid, redirect to the supplied URL.
         """
         form.save()
-
         messages.add_message(self.request, messages.SUCCESS, "Changes were saved.")
-
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
@@ -113,6 +112,7 @@ class MenuDetailView(LoginRequiredMixin, DetailView):
 
     # TODO: Add support for promatically passing in css files for preview
 
+    # Make sure object can only be viewed by object owner
     def get_queryset(self):
         queryset = super(MenuDetailView, self).get_queryset()
         queryset = queryset.filter(author__exact=self.request.user)
@@ -121,9 +121,9 @@ class MenuDetailView(LoginRequiredMixin, DetailView):
 
 class MenuPDFView(WeasyTemplateResponseMixin, MenuDetailView):
     # output of MyModelView rendered as PDF with hardcoded CSS
-    # pdf_stylesheets = [
-    #     settings.STATIC_ROOT + 'css/app.css',
-    # ]
+    pdf_stylesheets = [
+        "/Users/geoff/Repos/popinly/popinly/static/bootstrap.min.css",
+    ]
     # show pdf in-line (default: True, show download dialog)
     pdf_attachment = False
     # suggested filename (is required for attachment!)
