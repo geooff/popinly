@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
@@ -20,7 +20,9 @@ from django.views.generic import (
 from .forms import MenuSectionsItemsFormset
 from .models import Menu, MenuSection, MenuItem
 
-from django_weasyprint import WeasyTemplateResponseMixin
+from weasyprint import HTML, CSS
+from django.template.loader import render_to_string
+import tempfile
 
 
 class MenuListView(LoginRequiredMixin, ListView):
@@ -104,33 +106,29 @@ class MenuItemsUpdateView(LoginRequiredMixin, SingleObjectMixin, FormView):
         return reverse("menu_gen:edit", kwargs={"pk": self.object.pk})
 
 
-class MenuDetailView(LoginRequiredMixin, DetailView):
+def generate_menu_pdf(request, pk):
+    """Generate pdf."""
+    # Model data
+    menu = Menu.objects.all().filter(author__exact=request.user).get(pk=pk)
 
-    model = Menu
-    template_name = "menu_gen/menu_detail.html"
-    context_object_name = "menu"
+    # Rendered
+    html_string = render_to_string("menu_gen/menu_detail.html", {"menu": menu})
+    html = HTML(string=html_string)
 
-    # TODO: Add support for promatically passing in css files for preview
+    # Styling
+    css_files = [CSS("static/base_export.css"), CSS("static/bootstrap.min.css")]
 
-    # Make sure object can only be viewed by object owner
-    def get_queryset(self):
-        queryset = super(MenuDetailView, self).get_queryset()
-        queryset = queryset.filter(author__exact=self.request.user)
-        return queryset
+    # Generate PDF
+    result = html.write_pdf(stylesheets=css_files)
 
+    # Creating http response
+    response = HttpResponse(content_type="application/pdf;")
+    response["Content-Disposition"] = "inline; filename=menu.pdf"
+    response["Content-Transfer-Encoding"] = "binary"
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, "rb")
+        response.write(output.read())
 
-class MenuPDFView(WeasyTemplateResponseMixin, MenuDetailView):
-    # output of MyModelView rendered as PDF with hardcoded CSS
-    pdf_stylesheets = [
-        "/Users/geoff/Repos/popinly/popinly/static/bootstrap.min.css",
-    ]
-    # show pdf in-line (default: True, show download dialog)
-    pdf_attachment = False
-    # suggested filename (is required for attachment!)
-    pdf_filename = "menu.pdf"
-    export_template = "base_export.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(MenuPDFView, self).get_context_data(**kwargs)
-        context.update({"override_base": self.export_template})
-        return context
+    return response

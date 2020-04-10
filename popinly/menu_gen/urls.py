@@ -8,5 +8,5 @@ urlpatterns = [
     path("add/", views.MenuCreateView.as_view(), name="add"),
     path("edit/<uuid:pk>", views.MenuItemsUpdateView.as_view(), name="edit"),
     path("delete/<uuid:pk>", views.MenuDelete.as_view(), name="delete"),
-    path("<uuid:pk>", views.MenuPDFView.as_view(), name="detail"),
+    path("<uuid:pk>", views.generate_menu_pdf, name="detail"),
 ]
