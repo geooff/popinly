@@ -43,19 +43,17 @@ class MenuCreateView(LoginRequiredMixin, CreateView):
     model = Menu
     template_name = "menu_gen/menu_add.html"
     fields = [
-        "author",
         "restaurant_name",
         "title",
     ]
-
-    # TODO: Extend view to use current user as author and restaurant_name as dropdown of resturaunts
 
     def get_success_url(self):
         return reverse("menu_gen:edit", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, "The menu was added.")
-        return super().form_valid(form)
+        form.instance.author = self.request.user
+        return super(MenuCreateView, self).form_valid(form)
 
 
 class MenuDelete(LoginRequiredMixin, DeleteView):
