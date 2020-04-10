@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'base_style.css' %}">
     {% block title %}<title>Popinly</title>{% endblock %}
-    <!-- Add additional CSS in static file -->
   </head>
 <body>
 {% block navbar %}
@@ -22,16 +24,25 @@
       {% if user.is_authenticated %}
          <a class="btn btn-outline-primary" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
       {% else %}
-          <a class="btn btn-outline-primary" href="{% url 'login'%}?next={{request.path}}">Login</a>
+          <a class="btn btn-outline-primary mr-1" href="{% url 'login'%}?next={{request.path}}">Login</a>
           <a class="btn btn-outline-primary" href="{% url 'register'%}?next={{request.path}}">Register</a>
       {% endif %}
     </div>
     {% endblock %}
    
     <!-- The actual content of the page -->
+    <main role="main" class="container">
     </div>
-      <div class="col-sm-10 ">{% block content %}{% endblock %}</div>
+      {% block content %}{% endblock %}
     </div>
+    </main> 
+
+    <!-- Page footer -->
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted">Place sticky footer content here.</span>
+      </div>
+    </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
