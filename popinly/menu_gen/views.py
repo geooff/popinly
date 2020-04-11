@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,7 +19,9 @@ from django.views.generic import (
 from .forms import MenuSectionsItemsFormset
 from .models import Menu, MenuSection, MenuItem
 
+import sass
 from weasyprint import HTML, CSS
+from weasyprint.fonts import FontConfiguration
 from django.template.loader import render_to_string
 import tempfile
 
@@ -54,7 +55,6 @@ class MenuCreateView(LoginRequiredMixin, CreateView):
         return reverse("menu_gen:edit", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
-        messages.add_message(self.request, messages.SUCCESS, "The menu was added.")
         form.instance.author = self.request.user
         return super(MenuCreateView, self).form_valid(form)
 
@@ -99,7 +99,6 @@ class MenuItemsUpdateView(LoginRequiredMixin, SingleObjectMixin, FormView):
         If the form is valid, redirect to the supplied URL.
         """
         form.save()
-        messages.add_message(self.request, messages.SUCCESS, "Changes were saved.")
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
@@ -116,10 +115,12 @@ def generate_menu_pdf(request, pk):
     html = HTML(string=html_string)
 
     # Styling
-    css_files = [CSS("static/base_export.css"), CSS("static/bootstrap.min.css")]
+    user_css = sass.compile(filename="static/base_export.scss")
+    css_files = [CSS(string=user_css)]
+    font_config = FontConfiguration()
 
     # Generate PDF
-    result = html.write_pdf(stylesheets=css_files)
+    result = html.write_pdf(stylesheets=css_files, font_config=font_config)
 
     # Creating http response
     response = HttpResponse(content_type="application/pdf;")
