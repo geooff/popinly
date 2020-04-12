@@ -1,33 +1,30 @@
-{% extends "base_export.html" %}
-{% block content %}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Popinly.com">
+  </head>
 
-<div class="container py-5">
-    <div class="row">
-        <div class="col-lg-10 mx-auto col-12 text-center mb-3">
-            <h1 class="mt-0 text-primary">{{ menu.title }}</h1>
-            <p class="lead">Menu description goes here.</p>
-        </div>
-        {% for section in menu.menusection_set.all %}
-        <div class="col-12 mt-4">
-            <h3 class="text-center">{{ section.name }}</h3>
-            <hr class="accent my-5">
-        </div>
-        <div class="card-columns">
+  <body>
+    <h1>{{ menu.title }}</h1>
+    <table>
+      {% for section in menu.menusection_set.all %}
+      <thead>
+        <th>{{ section.name }}</th>
+      </thead>
+      <tbody>
         {% for item in section.menuitem_set.all %}
-            <div class="card card-body">
-                <span class="float-right font-weight-bold">{{ item.price }}</span>
-                <h6 class="text-truncate">{{ item.name }}</h6>
-                <p class="small">{{ item.description }}</p>
-            </div>
-          {% endfor %}
-        </div>
+        <tr>
+          <tr>
+            <td id="item_title">{{ item.name }}</td>
+            <td id="item_price">{{ item.price }}</td>
+          </tr>
+          <tr>
+            <td id="item_desc">{{ item.description }}</td>
+          </tr>
+        </tr>
         {% endfor %}
-        <div class="col-12 mt-5 border border-right-0 border-left-0">
-            <div class="row">
-                <div class="col h5">{{ menu.restaurant_name }}</div>
-            </div>
-        </div>
-    </div>
-</div>
-  
-{% endblock %}
+      </tbody>
+      {% endfor %}
+  </body>
+</html>
