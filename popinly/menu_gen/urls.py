@@ -6,7 +6,8 @@ app_name = "menu_gen"
 urlpatterns = [
     path("", views.MenuListView.as_view(), name="index"),
     path("add/", views.MenuCreateView.as_view(), name="add"),
-    path("edit/<uuid:pk>", views.MenuItemsUpdateView.as_view(), name="edit"),
+    path("edit_appearance/<uuid:pk>", views.MenuEditMeta.as_view(), name="edit_meta",),
+    path("edit_contents/<uuid:pk>", views.MenuItemsUpdateView.as_view(), name="edit"),
     path("delete/<uuid:pk>", views.MenuDelete.as_view(), name="delete"),
     path("<uuid:pk>", views.generate_menu_pdf, name="detail"),
 ]

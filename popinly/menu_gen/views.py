@@ -9,10 +9,9 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic import (
     CreateView,
-    DetailView,
     FormView,
     ListView,
-    TemplateView,
+    UpdateView,
     DeleteView,
 )
 
@@ -57,6 +56,24 @@ class MenuCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super(MenuCreateView, self).form_valid(form)
+
+
+class MenuEditMeta(LoginRequiredMixin, UpdateView):
+    """
+    For editing menu metadata (colour, name, ect..). Adding items to it is done in the
+    MenuItemsUpdateView().
+    """
+
+    model = Menu
+    template_name = "menu_gen/menu_edit_meta.html"
+    fields = ["restaurant_name", "title", "colour_palette"]
+
+    def get_success_url(self):
+        return reverse("menu_gen:index")
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(MenuEditMeta, self).form_valid(form)
 
 
 class MenuDelete(LoginRequiredMixin, DeleteView):
@@ -107,6 +124,15 @@ class MenuItemsUpdateView(LoginRequiredMixin, SingleObjectMixin, FormView):
 
 def generate_menu_pdf(request, pk):
     """Generate pdf."""
+
+    def _generate_colour_palette(menu):
+        colours = [x for x in menu.colour_palette.split(" ")]
+        body = """$primary-color: {};
+        $secondary-color: {};
+        $tertiary-color: {};
+        $accent-color: {};"""
+        return body.format(*colours)
+
     # Model data
     menu = Menu.objects.all().filter(author__exact=request.user).get(pk=pk)
 
@@ -115,7 +141,11 @@ def generate_menu_pdf(request, pk):
     html = HTML(string=html_string)
 
     # Styling
-    user_css = sass.compile(filename="static/base_export.scss")
+    user_styling = _generate_colour_palette(menu)
+    with open("static/base_export.scss", "r") as template_css_contents:
+        template_css = template_css_contents.read()
+    css = user_styling + template_css
+    user_css = sass.compile(string=css)
     css_files = [CSS(string=user_css)]
     font_config = FontConfiguration()
 

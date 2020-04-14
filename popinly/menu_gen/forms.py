@@ -7,7 +7,12 @@ from .models import Menu, MenuSection, MenuItem
 
 # The formset for editing the menuItems that belong to a menuSection.
 MenuSectionFormset = inlineformset_factory(
-    MenuSection, MenuItem, fields=("name", "description", "price"), extra=1
+    MenuSection,
+    MenuItem,
+    fields=("name", "description", "price"),
+    extra=1,
+    can_order=True,
+    can_delete=True,
 )
 
 
@@ -118,5 +123,6 @@ MenuSectionsItemsFormset = inlineformset_factory(
     # We need to specify at least one menuSection field:
     fields=("name", "description"),
     extra=1,
+    can_order=True,
     can_delete=False,
 )

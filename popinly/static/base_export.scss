@@ -2,9 +2,6 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto+Slab|Open+Sans:400italic,700italic,400,700);
 
 $impact-font: 'Roboto Slab', serif;   
-$primary-color: #2771e9;
-$secondary-color: rgb(54, 141, 112);
-$accent-color: rgb(11, 56, 41);
 
 @page {
   margin: 3cm;
@@ -22,10 +19,6 @@ html {
     font-family: $impact-font;
     font-size: 40pt;
     margin: 0; }
-    h3 {
-      color: $primary-color;
-      font-family: $impact-font;
-      margin: 0; }
     aside {
     display: flex;
     margin: 2em 0 4em; }
@@ -43,10 +36,13 @@ html {
       padding-top: 3mm; 
       margin-bottom: 0mm;}
       #item_title {
+        color: secondary-color;
         font-weight: 700;
         text-align: left;}
       #item_price {
+        color: $tertiary-color;
         text-align: right;}
       #item_desc {
+        color: $tertiary-color;
         text-align: left; 
         padding-top: 0mm;}
