@@ -48,4 +48,4 @@ class MenuItem(models.Model):
     created_at = models.DateField(default=timezone.now)
 
     def __str__(self):
-        return self.item_name
+        return self.name
