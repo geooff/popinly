@@ -1,4 +1,5 @@
 {% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %} 
 
@@ -10,25 +11,11 @@
 
   <form method="post" action="{% url 'register' %}">
    {% csrf_token %}
-  <table>
-
-   <tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-   </tr>
-
-  <tr>
-  <td>{{ form.password1.label_tag }}</td>
-  <td>{{ form.password1 }}</td>
-  <td>{{ form.password2.label_tag }}</td>
-  <td>{{ form.password2 }}</td>
-</tr>
-
-</table>
-
-<input type="submit" value="Register" />
+    <table>
+      {{ form|crispy }}
+    </table>
+    <button class="btn btn-primary" type="submit">Register</button>
 </form>
-
-
-
+<br>
+<p>Already registered? <a href="{% url 'login' %}">Sign in.</a></p>
 {% endblock %}
