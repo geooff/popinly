@@ -19,7 +19,8 @@
         <a href="{% url 'index' %}">Popinly</a>
       </h5>
       <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" href="#">Features</a>
+        <a class="p-2 text-dark" href="{% url 'features' %}">Features</a>
+        <a class="p-2 text-dark" href="{% url 'menu_gen:index' %}">FAQ</a>
         <a class="p-2 text-dark" href="{% url 'menu_gen:index' %}">Generate Menus</a>
       </nav>
       {% if user.is_authenticated %}

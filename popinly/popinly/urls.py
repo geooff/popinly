@@ -7,6 +7,7 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("features/", views.features, name="features"),
     path("generator/", include("menu_gen.urls")),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),

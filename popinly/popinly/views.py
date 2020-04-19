@@ -4,7 +4,11 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 def index(request):
-    return render(request, "index.html")
+    return render(request, "core/index.html")
+
+
+def features(request):
+    return render(request, "core/features.html")
 
 
 class RegisterView(FormView):
