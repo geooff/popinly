@@ -13,6 +13,7 @@ class Menu(models.Model):
     title = models.CharField(max_length=200)
     created_at = models.DateField(default=timezone.now)
 
+    # TODO: Refactor this out to an external file
     class ColourPalette(models.TextChoices):
         Formal = "#2B2D42 #f0a500 #cf7501 #dbdbdb", _("Formal")
         Modern = "#000000 #8D99AE #D90429 #EF233C", _("Modern")
@@ -22,6 +23,32 @@ class Menu(models.Model):
 
     colour_palette = models.CharField(
         max_length=31, choices=ColourPalette.choices, default=ColourPalette.Formal,
+    )
+
+    # TODO: Refactor this out to an external file
+    class ImpactFontPalette(models.TextChoices):
+        Formal = "Dancing+Script", _("Danging Script")
+        Modern = "Josefin+Sans", _("Josefin Sans")
+        Autumn = "Reenie+Beanie", _("Reenie Beanie")
+        Fultur = "Nothing+You+Could+Do", _("Nothing You Could Do")
+        Oculum = "Tenor+Sans", _("Tenor Sans")
+
+    impact_font = models.CharField(
+        max_length=31,
+        choices=ImpactFontPalette.choices,
+        default=ImpactFontPalette.Formal,
+    )
+
+    # TODO: Refactor this out to an external file
+    class BaseFontPalette(models.TextChoices):
+        Formal = "Roboto", _("Roboto")
+        Modern = "Lato", _("Lato")
+        Autumn = "Open+Sans", _("Open Sans")
+        Fultur = "Montserrat", _("Montserrat")
+        Oculum = "Source Sans Pro", _("Source Sans Pro")
+
+    base_font = models.CharField(
+        max_length=31, choices=BaseFontPalette.choices, default=BaseFontPalette.Formal,
     )
 
     def __str__(self):

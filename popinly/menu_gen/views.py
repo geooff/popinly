@@ -17,6 +17,7 @@ from django.views.generic import (
 
 from .forms import MenuSectionsItemsFormset
 from .models import Menu, MenuSection, MenuItem
+from .dynamicStyle import userColourTemplate, userFontTemplate
 
 import sass
 from weasyprint import HTML, CSS
@@ -66,7 +67,7 @@ class MenuEditMeta(LoginRequiredMixin, UpdateView):
 
     model = Menu
     template_name = "menu_gen/menu_edit_meta.html"
-    fields = ["restaurant_name", "title", "colour_palette"]
+    fields = ["restaurant_name", "title", "colour_palette", "impact_font", "base_font"]
 
     def get_success_url(self):
         return reverse("menu_gen:index")
@@ -127,11 +128,19 @@ def generate_menu_pdf(request, pk):
 
     def _generate_colour_palette(menu):
         colours = [x for x in menu.colour_palette.split(" ")]
-        body = """$primary-color: {};
-        $secondary-color: {};
-        $tertiary-color: {};
-        $accent-color: {};"""
+        body = userColourTemplate()
         return body.format(*colours)
+
+    def _generate_font_palette(menu):
+        impact = menu.impact_font
+        base = menu.base_font
+        body = userFontTemplate()
+        return body.format(
+            impact_web=impact,
+            impact=impact.replace("+", " "),
+            base_web=base,
+            base=base.replace("+", " "),
+        )
 
     # Model data
     menu = Menu.objects.all().filter(author__exact=request.user).get(pk=pk)
@@ -141,13 +150,15 @@ def generate_menu_pdf(request, pk):
     html = HTML(string=html_string)
 
     # Styling
-    user_styling = _generate_colour_palette(menu)
+    font_config = FontConfiguration()
+    user_font = _generate_font_palette(menu)
+    user_colour = _generate_colour_palette(menu)
     with open("static/base_export.scss", "r") as template_css_contents:
         template_css = template_css_contents.read()
-    css = user_styling + template_css
+    css = user_font + user_colour + template_css
     user_css = sass.compile(string=css)
-    css_files = [CSS(string=user_css)]
-    font_config = FontConfiguration()
+    print(user_css)
+    css_files = [CSS(string=user_css, font_config=font_config)]
 
     # Generate PDF
     result = html.write_pdf(stylesheets=css_files, font_config=font_config)

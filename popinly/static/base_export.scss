@@ -1,7 +1,4 @@
 @charset "UTF-8";
-@import url(http://fonts.googleapis.com/css?family=Roboto+Slab|Open+Sans:400italic,700italic,400,700);
-
-$impact-font: 'Roboto Slab', serif;   
 
 @page {
   margin: 3cm;
@@ -9,8 +6,6 @@ $impact-font: 'Roboto Slab', serif;
 
 html {
   color: $primary-color;
-  font-family: $impact-font;
-  font-size: 11pt;
   line-height: 1.6; }
     body {
       margin: 0; }
@@ -28,6 +23,7 @@ html {
     th {
       border-bottom: .2mm solid $accent-color;
       color: $secondary-color;
+      font-family: $impact-font;
       font-size: 18pt;
       font-weight: 400;
       padding-bottom: .2cm;
@@ -37,12 +33,15 @@ html {
       margin-bottom: 0mm;}
       #item_title {
         color: secondary-color;
+        font-family: $base-font;
         font-weight: 700;
         text-align: left;}
       #item_price {
         color: $tertiary-color;
+        font-family: $base-font;
         text-align: right;}
       #item_desc {
         color: $tertiary-color;
+        font-family: $base-font;
         text-align: left; 
         padding-top: 0mm;}
