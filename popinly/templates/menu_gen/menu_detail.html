@@ -7,12 +7,9 @@
 
   <body>
     <h1>{{ menu.title }}</h1>
-    <table>
       {% for section in menu.menusection_set.all %}
-      <thead>
-        <th>{{ section.name }}</th>
-      </thead>
-      <tbody>
+      <table>
+      <th>{{ section.name }}</th>
         {% for item in section.menuitem_set.all %}
         <tr>
           <tr>
@@ -24,7 +21,8 @@
           </tr>
         </tr>
         {% endfor %}
-      </tbody>
+        </table>
+        <br>
       {% endfor %}
   </body>
 </html>

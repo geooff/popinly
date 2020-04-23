@@ -155,9 +155,9 @@ def generate_menu_pdf(request, pk):
     user_colour = _generate_colour_palette(menu)
     with open("static/base_export.scss", "r") as template_css_contents:
         template_css = template_css_contents.read()
+
     css = user_font + user_colour + template_css
     user_css = sass.compile(string=css)
-    print(user_css)
     css_files = [CSS(string=user_css, font_config=font_config)]
 
     # Generate PDF

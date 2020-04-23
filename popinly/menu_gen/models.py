@@ -15,11 +15,11 @@ class Menu(models.Model):
 
     # TODO: Refactor this out to an external file
     class ColourPalette(models.TextChoices):
-        Formal = "#2B2D42 #f0a500 #cf7501 #dbdbdb", _("Formal")
-        Modern = "#000000 #8D99AE #D90429 #EF233C", _("Modern")
+        Formal = "#000000 #000000 #000000 #000000", _("Formal")
+        Modern = "#702323 #000000 #702323 #000000", _("Modern")
         Autumn = "#000r00 #f0a502 #cf7503 #dbdbd2", _("Autumn")
-        Fultur = "#00e000 #f0a503 #cf7504 #dbdbd3", _("Fultur")
-        Oculum = "#000040 #f0a504 #cf7500 #dbdbd4", _("Oculum")
+        Fultur = "#1f4027 #000000 #000000 #000000", _("Fultur")
+        Oculum = "#266682 #1d2224 #1d2224 #1d2224", _("Oculum")
 
     colour_palette = models.CharField(
         max_length=31, choices=ColourPalette.choices, default=ColourPalette.Formal,
