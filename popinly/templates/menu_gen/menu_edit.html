@@ -68,7 +68,10 @@
           </span>
       {% endif %}
     {% endfor %}
-
-  <button type="submit">Update Menu</button>
-  </form>
+<br>
+  <p>
+    <button type="submit" class="btn btn-success">Update Menu</button>
+    <a class="btn btn-outline" href="{% url 'menu_gen:index' %}">Cancel</a>
+  </p>
+</form>
 {% endblock %}
