@@ -1,7 +1,6 @@
 def userColourTemplate():
     return """$primary-color: {};
         $secondary-color: {};
-        $tertiary-color: {};
         $accent-color: {};"""
 
 

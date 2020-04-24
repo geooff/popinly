@@ -32,16 +32,16 @@ html {
       padding-top: 3mm; 
       margin-bottom: 0mm;}
       #item_title {
-        color: secondary-color;
+        color: $secondary-color;
         font-family: $base-font;
         font-weight: 700;
         text-align: left;}
       #item_price {
-        color: $tertiary-color;
+        color: $secondary-color;
         font-family: $base-font;
         text-align: right;}
       #item_desc {
-        color: $tertiary-color;
+        color: $secondary-color;
         font-family: $base-font;
         text-align: left; 
         padding-top: 0mm;}
