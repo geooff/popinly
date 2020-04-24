@@ -124,5 +124,5 @@ MenuSectionsItemsFormset = inlineformset_factory(
     fields=("name", "description"),
     extra=1,
     can_order=True,
-    can_delete=False,
+    can_delete=True,
 )

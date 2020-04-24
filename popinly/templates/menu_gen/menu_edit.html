@@ -2,6 +2,12 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    To add and remove items check the items delete box and submit your changes at the bottom of the page.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
 
   <h1>Editing Menu</h1>
 
@@ -37,6 +43,7 @@
         </div>
       </div>
       {{ menu_section_form.description|as_crispy_field }}
+      {{ menu_section_form.DELETE|as_crispy_field }}
       {% if menu_section_form.nested %}
         <h3>Items</h3>
           {{ menu_section_form.nested.management_form }}
