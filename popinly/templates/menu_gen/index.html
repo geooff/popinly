@@ -29,9 +29,9 @@
     {% endfor %}
     </tbody>
   </table>
-  <a href="{% url 'menu_gen:add' %}" class="btn btn-outline-primary">Create a new menu!</a>
     {% else %}
       <p>No menus available to edit.</p>
     {% endif %}
+      <a href="{% url 'menu_gen:add' %}" class="btn btn-outline-primary">Create a new menu!</a>
   {% endif %}
 {% endblock %}
