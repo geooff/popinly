@@ -10,6 +10,9 @@
       {% for section in menu.menusection_set.all %}
       <table>
       <th>{{ section.name }}</th>
+      <tr>
+        <td id="item_desc">{{ section.description }}</td>
+      </tr>
         {% for item in section.menuitem_set.all %}
         <tr>
           <tr>
