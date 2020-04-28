@@ -9,9 +9,9 @@ from .models import Menu, MenuSection, MenuItem
 MenuSectionFormset = inlineformset_factory(
     MenuSection,
     MenuItem,
-    fields=("name", "description", "price"),
+    fields=("name", "description", "price", "order"),
     extra=1,
-    can_order=True,
+    can_order=False,
     can_delete=True,
 )
 
@@ -59,6 +59,9 @@ class BaseMenuWithSectionFormset(BaseInlineFormSet):
         for form in self.forms:
             if not hasattr(form, "nested") or self._should_delete_form(form):
                 continue
+
+            # TODO: Implement logic to catch duplicate orders
+            # https://stackoverflow.com/questions/2141030/djangos-modelform-unique-together-validation
 
             if self._is_adding_nested_inlines_to_empty_form(form):
                 form.add_error(
@@ -120,9 +123,8 @@ MenuSectionsItemsFormset = inlineformset_factory(
     Menu,
     MenuSection,
     formset=BaseMenuWithSectionFormset,
-    # We need to specify at least one menuSection field:
-    fields=("name", "description"),
+    fields=("name", "description", "order"),
     extra=1,
-    can_order=True,
+    can_order=False,
     can_delete=True,
 )

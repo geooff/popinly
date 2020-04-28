@@ -33,13 +33,14 @@
         {% endif %}
       {% for hidden_field in menu_section_form.hidden_fields %}
         {{ hidden_field.errors }}
+        {{ hidden_field }}
       {% endfor %}
       <div class="form-row">
         <div class="form-group col-md-11 mb-0">
           {{ menu_section_form.name|as_crispy_field }}
         </div>
         <div class="form-group col mb-0">
-          {{ menu_section_form.ORDER|as_crispy_field }}
+          {{ menu_section_form.order|as_crispy_field }}
         </div>
       </div>
       {{ menu_section_form.description|as_crispy_field }}
@@ -57,13 +58,14 @@
             {% endif %}
             {% for hidden_field in menu_item_form.hidden_fields %}
               {{ hidden_field.errors }}
+              {{ hidden_field }}
             {% endfor %}
               <div class="form-row">
                 <div class="form-group col-11 mb-0">
                   {{ menu_item_form.name|as_crispy_field }}
                 </div>
                 <div class="form-group col mb-0">
-                  {{ menu_item_form.ORDER|as_crispy_field }}
+                  {{ menu_item_form.order|as_crispy_field }}
                 </div>
               </div>
               {{ menu_item_form.description|as_crispy_field }}

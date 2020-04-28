@@ -10,6 +10,7 @@
       <tr>
         <th>Restaurant</th>
         <th>Title</th>
+        <th>Created On</th>
         <th></th>
         <th></th>
         <th></th>
@@ -19,8 +20,9 @@
     <tbody>
     {% for menu in user_menus %}
       <tr>
-        <td>{{ menu.restaurant_name }} </td>
+        <td>{{ menu }} </td>
         <td>{{ menu.title }}</td>
+        <td>{{ menu.created_at }}</td>
         <td><a href="{% url 'menu_gen:detail' menu.uuid %}">View</a></td>
         <td><a href="{% url 'menu_gen:edit_meta' menu.uuid %}">Edit Appearance</a></td>
         <td><a href="{% url 'menu_gen:edit' menu.uuid %}">Edit Contents</a></td>
