@@ -4,11 +4,37 @@ from django.utils.translation import ugettext_lazy as _
 from .utils.forms import is_empty_form, is_form_persisted
 from .models import Menu, MenuSection, MenuItem
 
+# Adapted from: https://github.com/philgyford/django-nested-inline-formsets-example
+
+
+class BaseSectionWithItemsFormset(BaseInlineFormSet):
+    """
+    The base formset for editing menuItems belonging to a menuSections
+    """
+
+    def clean(self):
+        """
+        Validation to ensure that each menu section is unique
+        """
+        super().clean()
+
+        orders = []
+        for form in self.forms:
+            if form.cleaned_data:
+                order = form.cleaned_data["order"]
+                if order in orders:
+                    form.add_error(
+                        "order", _("The order of each item in a section must be unique")
+                    )
+                else:
+                    orders.append(order)
+
 
 # The formset for editing the menuItems that belong to a menuSection.
 MenuSectionFormset = inlineformset_factory(
     MenuSection,
     MenuItem,
+    formset=BaseSectionWithItemsFormset,
     fields=("name", "description", "price", "order"),
     extra=1,
     can_order=False,
@@ -18,9 +44,7 @@ MenuSectionFormset = inlineformset_factory(
 
 class BaseMenuWithSectionFormset(BaseInlineFormSet):
     """
-    Adapted from: https://github.com/philgyford/django-nested-inline-formsets-example
-    The base formset for editing menuSections belonging to a Menu, and the
-    menuItem belonging to those menuSections.
+    The base formset for editing menuSections belonging to a Menu
     """
 
     def add_fields(self, form, index):
@@ -56,12 +80,10 @@ class BaseMenuWithSectionFormset(BaseInlineFormSet):
         """
         super().clean()
 
+        orders = []
         for form in self.forms:
             if not hasattr(form, "nested") or self._should_delete_form(form):
                 continue
-
-            # TODO: Implement logic to catch duplicate orders
-            # https://stackoverflow.com/questions/2141030/djangos-modelform-unique-together-validation
 
             if self._is_adding_nested_inlines_to_empty_form(form):
                 form.add_error(
@@ -72,6 +94,17 @@ class BaseMenuWithSectionFormset(BaseInlineFormSet):
                         "about the menu section and choose the menu item(s) again."
                     ),
                 )
+
+            # Validation to ensure that each menu section is unique
+            if form.cleaned_data:
+                order = form.cleaned_data["order"]
+                if order in orders:
+                    form.add_error(
+                        "order",
+                        _("The order of each section in the menu must be unique"),
+                    )
+                else:
+                    orders.append(order)
 
     def save(self, commit=True):
         """
@@ -116,9 +149,6 @@ class BaseMenuWithSectionFormset(BaseInlineFormSet):
 
 # This is the formset for the menuSections belonging to a Menu and the
 # menuItems belonging to those menuSections.
-#
-# You'd use this by passing in a Publisher:
-#     MenuSectionsItemsFormset(**form_kwargs, instance=self.object)
 MenuSectionsItemsFormset = inlineformset_factory(
     Menu,
     MenuSection,
