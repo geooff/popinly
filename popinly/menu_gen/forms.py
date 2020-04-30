@@ -12,6 +12,9 @@ class BaseSectionWithItemsFormset(BaseInlineFormSet):
     The base formset for editing menuItems belonging to a menuSections
     """
 
+    def get_queryset(self):
+        return super().get_queryset().order_by("order")
+
     def clean(self):
         """
         Validation to ensure that each menu section is unique
@@ -46,6 +49,9 @@ class BaseMenuWithSectionFormset(BaseInlineFormSet):
     """
     The base formset for editing menuSections belonging to a Menu
     """
+
+    def get_queryset(self):
+        return super().get_queryset().order_by("order")
 
     def add_fields(self, form, index):
         super().add_fields(form, index)

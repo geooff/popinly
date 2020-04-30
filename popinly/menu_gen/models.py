@@ -75,6 +75,9 @@ class MenuSection(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["order"]
+
 
 class MenuItem(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
@@ -97,3 +100,6 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["order"]
