@@ -65,6 +65,8 @@ class MenuSection(models.Model):
     )
     description = models.CharField(
         max_length=200,
+        blank=True,
+        default="",
         error_messages={"required": "Menu section description is Required"},
     )
     order = models.IntegerField(
