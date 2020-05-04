@@ -24,7 +24,7 @@ class BaseSectionWithItemsFormset(BaseInlineFormSet):
         orders = []
         for form in self.forms:
             if form.cleaned_data:
-                order = form.cleaned_data["order"]
+                order = form.cleaned_data.get("order")
                 if order in orders:
                     form.add_error(
                         "order", _("The order of each item in a section must be unique")

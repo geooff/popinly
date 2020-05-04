@@ -20,7 +20,7 @@
     <tbody>
     {% for menu in user_menus %}
       <tr>
-        <td>{{ menu }} </td>
+        <td>{{ menu.restaurant_name }} </td>
         <td>{{ menu.title }}</td>
         <td>{{ menu.created_at }}</td>
         <td><a href="{% url 'menu_gen:detail' menu.uuid %}">View</a></td>
