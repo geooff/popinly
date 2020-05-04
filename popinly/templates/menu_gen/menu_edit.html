@@ -51,30 +51,36 @@
           {{ menu_section_form.nested.non_form_errors }}
           {% for menu_item_form in menu_section_form.nested.forms %}
             <span class="d-block p-2 bg-secondary text-white">
-            {% if menu_item_form.instance.name %}
-              <h5>Editing Menu Item: {{ menu_item_form.instance.name }}</h5>
-            {% else %}
-              <h5>Add a Menu Item</h5>
-            {% endif %}
-            {% for hidden_field in menu_item_form.hidden_fields %}
-              {{ hidden_field.errors }}
-              {{ hidden_field }}
-            {% endfor %}
-              <div class="form-row">
-                <div class="form-group col-11 mb-0">
-                  {{ menu_item_form.name|as_crispy_field }}
+              {% if menu_item_form.instance.name %}
+                <h5>Editing Menu Item: {{ menu_item_form.instance.name }}</h5>
+              {% else %}
+                <h5>Add a Menu Item</h5>
+              {% endif %}
+              {% for hidden_field in menu_item_form.hidden_fields %}
+                {{ hidden_field.errors }}
+                {{ hidden_field }}
+              {% endfor %}
+                <div class="form-group">
+                  <div class="form-row">
+                    <div class="col-10 mb-0">
+                      {{ menu_item_form.name|as_crispy_field }}
+                    </div>
+                    <div class="col mb-0">
+                      {{ menu_item_form.price|as_crispy_field }}
+                    </div>                
+                    <div class="col mb-0">
+                      {{ menu_item_form.order|as_crispy_field }}
+                    </div>
+                  </div>
+                  {{ menu_item_form.description|as_crispy_field }}
+                  <div class="form-group mb-2">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <span> Delete {{ menu_item_form.DELETE }} </span>
+                  </div>
                 </div>
-                <div class="form-group col mb-0">
-                  {{ menu_item_form.order|as_crispy_field }}
-                </div>
-              </div>
-              {{ menu_item_form.description|as_crispy_field }}
-              {{ menu_item_form.price|as_crispy_field }}
-              {{ menu_item_form.DELETE|as_crispy_field }}
-            </span>
+              </span>
             <br>
             {% endfor %}
-          </span>
       {% endif %}
     {% endfor %}
 <br>

@@ -82,9 +82,7 @@ class MenuItem(models.Model):
     name = models.CharField(
         max_length=200, error_messages={"required": "Menu item name is Required"}
     )
-    description = models.CharField(
-        max_length=200, error_messages={"required": "Menu item description is Required"}
-    )
+    description = models.CharField(max_length=200, blank=True, default="")
     price = models.DecimalField(
         max_digits=5,
         decimal_places=2,
