@@ -2,22 +2,80 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <form action="" method="post">
+  <div class="row">
+    <div class="col-8">
+    <form action="" method="post">
 
-    {% for hidden_field in form.hidden_fields %}
-        {{ hidden_field.errors }}
-        {{ hidden_field }}
-    {% endfor %}
+      {% for hidden_field in form.hidden_fields %}
+          {{ hidden_field.errors }}
+          {{ hidden_field }}
+      {% endfor %}
 
-    {% csrf_token %}
-    {{ form.non_form_errors }}
-    <table>
-      {{ form|crispy }}
-    </table>
-    <p>
-      <button type="submit" class="btn btn-success">Update Appearance</button>
-      <a class="btn btn-outline" href="{% url 'menu_gen:index' %}">Cancel</a>
-    </p>
-  </form>
-
+      {% csrf_token %}
+      {{ form.non_form_errors }}
+      <table>
+        {{ form|crispy }}
+      </table>
+      <p>
+        <button type="submit" class="btn btn-success">Update Appearance</button>
+        <a class="btn btn-outline" href="{% url 'menu_gen:index' %}">Cancel</a>
+      </p>
+    </form>
+    </div>
+    <div class="col-4">
+      <div class="jumbotron">
+      <h1 class="display-5">Colour Pallets</h1>
+        <div class="row">
+          <div class="col-6">
+            <ul class="list-group">
+              <li class="list-group-item" style="background-color:#000000"></li>
+              <li class="list-group-item" style="background-color:#000000"></li>
+              <li class="list-group-item" style="background-color:#000000;color:#fff">Formal</li>
+            </ul>
+          </div>
+          <div class="col-6">
+            <ul class="list-group">
+              <li class="list-group-item" style="background-color:#702323"></li>
+              <li class="list-group-item" style="background-color:#702323"></li>
+              <li class="list-group-item" style="background-color:#000000;color:#fff">Modern</li>
+            </ul>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-6">
+            <ul class="list-group">
+              <li class="list-group-item" style="background-color:#8f741d"></li>
+              <li class="list-group-item" style="background-color:#8f741d"></li>
+              <li class="list-group-item" style="background-color:#000000;color:#fff">Autumn</li>
+            </ul>
+          </div>
+          <div class="col-6">
+            <ul class="list-group">
+              <li class="list-group-item" style="background-color:#1f4027"></li>
+              <li class="list-group-item" style="background-color:#1f4027"></li>
+              <li class="list-group-item" style="background-color:#000000;color:#fff">Fultur</li>
+            </ul>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-6">
+            <ul class="list-group">
+              <li class="list-group-item" style="background-color:#266682"></li>
+              <li class="list-group-item" style="background-color:#266682"></li>
+              <li class="list-group-item" style="background-color:#000000;color:#fff">Oculum</li>
+            </ul>
+          </div>
+          <div class="col-6">
+            <ul class="list-group">
+              <li class="list-group-item" style="background-color:#000000"></li>
+              <li class="list-group-item" style="background-color:#c75b5d"></li>
+              <li class="list-group-item" style="background-color:#000000;color:#fff">Salmon</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

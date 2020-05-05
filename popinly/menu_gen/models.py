@@ -16,12 +16,14 @@ class Menu(models.Model):
     created_at = models.DateField(default=timezone.now)
 
     # TODO: Refactor this out to an external file
+    # Follows format Primary Colour, Secondary Colour, Accent Colour
     class ColourPalette(models.TextChoices):
         Formal = "#000000 #000000 #000000", _("Formal")
         Modern = "#702323 #000000 #702323", _("Modern")
-        Autumn = "#000r00 #f0a502 #cf7503", _("Autumn")
+        Autumn = "#8f741d #000000 #000000", _("Autumn")
         Fultur = "#1f4027 #0f2113 #1f4037", _("Fultur")
         Oculum = "#266682 #1d2224 #1d2224", _("Oculum")
+        Salmon = "#000000 #000000 #c75b5d", _("Salmon")
 
     colour_palette = models.CharField(
         max_length=23, choices=ColourPalette.choices, default=ColourPalette.Formal,
