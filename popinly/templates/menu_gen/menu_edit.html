@@ -44,7 +44,10 @@
         </div>
       </div>
       {{ menu_section_form.description|as_crispy_field }}
-      {{ menu_section_form.DELETE|as_crispy_field }}
+      <div class="form-group mb-2">
+        <button type="submit" class="btn btn-success">Save</button>
+        <span> Delete {{ menu_section_form.DELETE }} </span>
+      </div>
       {% if menu_section_form.nested %}
         <h3>Items</h3>
           {{ menu_section_form.nested.management_form }}
