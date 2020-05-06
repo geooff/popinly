@@ -7,10 +7,6 @@ def index(request):
     return render(request, "core/index.html")
 
 
-def features(request):
-    return render(request, "core/features.html")
-
-
 class RegisterView(FormView):
     template_name = "registration/register.html"
     form_class = UserCreationForm
