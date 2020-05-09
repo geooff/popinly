@@ -67,7 +67,7 @@ class MenuSection(models.Model):
     )
     description = models.CharField(max_length=200, blank=True, default="")
     order = models.PositiveIntegerField(
-        error_messages={"required": "Menu section order is Required"}
+        error_messages={"required": "Menu section order is Required"}, default=1
     )
     created_at = models.DateField(default=timezone.now)
 
@@ -91,7 +91,7 @@ class MenuItem(models.Model):
         error_messages={"required": "Menu item price is Required"},
     )
     order = models.PositiveIntegerField(
-        error_messages={"required": "Menu item order is Required"}
+        error_messages={"required": "Menu item order is Required"}, default=1
     )
     created_at = models.DateField(default=timezone.now)
 

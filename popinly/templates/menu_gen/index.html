@@ -1,9 +1,8 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Welcome to the menu generator page!</h1>
   {% if user.is_authenticated %}
-    <h2>Select a menu to edit!</h2>
+    <h2>Select a menu to edit.</h2>
     {% if user_menus %}
     <table class="table table-hover">
     <thead>
