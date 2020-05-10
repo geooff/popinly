@@ -2,12 +2,31 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    To add and remove items check the items delete box and submit your changes at the bottom of the page.
+  {% comment %} <div class="alert alert-info alert-dismissible fade show" role="alert">
+    Note: Items must be added individually.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div> {% endcomment %}
+
+{% if form.errors %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div id="form-error">
+      <p>The operation could not be performed because one or more error(s) occurred.<br />Please resubmit the form after making the following changes:</p>
+      <ul>
+        {% for nested in form.forms %}
+          <ul>{{ nested.errors.as_text }}</ul>
+          {% for child in nested.nested.forms %}
+            <ul>{{ child.errors.as_text }}</ul>
+        {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
+{% endif %}
 
   <h1>Editing Menu</h1>
 

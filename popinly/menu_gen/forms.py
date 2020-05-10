@@ -97,7 +97,7 @@ class BaseMenuWithSectionFormset(BaseInlineFormSet):
                     error=_(
                         "You are trying to add menu items(s) to a menu section which "
                         "does not yet exist. Please add information "
-                        "about the menu section and choose the menu item(s) again."
+                        "about the menu section and try again."
                     ),
                 )
 
@@ -106,7 +106,7 @@ class BaseMenuWithSectionFormset(BaseInlineFormSet):
                 order = form.cleaned_data["order"]
                 if order in orders:
                     form.add_error(
-                        "order",
+                        "Order",
                         _("The order of each section in the menu must be unique"),
                     )
                 else:
