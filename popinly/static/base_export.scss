@@ -11,7 +11,7 @@ html {
       margin: 0; }
     h1 {
     color: $primary-color;
-    font-family: $impact-font;
+    font-family: $title-font;
     font-size: 40pt;
     margin: 0; }
     aside {
@@ -23,7 +23,7 @@ html {
     th {
       border-bottom: .2mm solid $accent-color;
       color: $secondary-color;
-      font-family: $impact-font;
+      font-family: $title-font;
       font-size: 18pt;
       font-weight: 400;
       padding-bottom: .2cm;

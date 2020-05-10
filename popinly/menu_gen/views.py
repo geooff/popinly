@@ -138,12 +138,12 @@ def generate_menu_pdf(request, pk):
         return body.format(*colours)
 
     def _generate_font_palette(menu):
-        impact = menu.impact_font
+        title = menu.title_font
         base = menu.base_font
         body = userFontTemplate()
         return body.format(
-            impact_web=impact,
-            impact=impact.replace("+", " "),
+            title_web=title,
+            title=title.replace("+", " "),
             base_web=base,
             base=base.replace("+", " "),
         )

@@ -5,8 +5,8 @@ def userColourTemplate():
 
 
 def userFontTemplate():
-    return """@import url('https://fonts.googleapis.com/css2?family={impact_web}&display=swap');
+    return """@import url('https://fonts.googleapis.com/css2?family={title_web}&display=swap');
 @import url('https://fonts.googleapis.com/css2?family={base_web}&display=swap');
 
-$impact-font: '{impact}', sans-serif;
+$title-font: '{title}', sans-serif;
 $base-font: '{base}', sans-serif;"""
