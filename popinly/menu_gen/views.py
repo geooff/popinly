@@ -48,7 +48,7 @@ class MenuCreateView(LoginRequiredMixin, CreateView):
     template_name = "menu_gen/menu_add.html"
     fields = [
         "restaurant_name",
-        "title",
+        "menu_title",
     ]
 
     def get_success_url(self):
@@ -67,7 +67,13 @@ class MenuEditMeta(LoginRequiredMixin, UpdateView):
 
     model = Menu
     template_name = "menu_gen/menu_edit_meta.html"
-    fields = ["restaurant_name", "title", "colour_palette", "impact_font", "base_font"]
+    fields = [
+        "restaurant_name",
+        "menu_title",
+        "colour_palette",
+        "title_font",
+        "base_font",
+    ]
 
     def get_success_url(self):
         return reverse("menu_gen:index")

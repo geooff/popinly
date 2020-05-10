@@ -10,7 +10,7 @@ class Menu(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     restaurant_name = models.CharField(max_length=200)
-    title = models.CharField(
+    menu_title = models.CharField(
         max_length=200, error_messages={"required": "Menu Title is Required"}
     )
     created_at = models.DateField(default=timezone.now)
@@ -37,7 +37,7 @@ class Menu(models.Model):
         Fultur = "Nothing+You+Could+Do", _("Nothing You Could Do")
         Oculum = "Tenor+Sans", _("Tenor Sans")
 
-    impact_font = models.CharField(
+    title_font = models.CharField(
         max_length=31,
         choices=ImpactFontPalette.choices,
         default=ImpactFontPalette.Formal,
@@ -56,7 +56,7 @@ class Menu(models.Model):
     )
 
     def __str__(self):
-        return self.title
+        return self.menu_title
 
 
 class MenuSection(models.Model):
