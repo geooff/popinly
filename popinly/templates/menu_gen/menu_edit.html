@@ -2,12 +2,6 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  {% comment %} <div class="alert alert-info alert-dismissible fade show" role="alert">
-    Note: Items must be added individually.
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div> {% endcomment %}
 
 {% if form.errors %}
   <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -31,84 +25,88 @@
   <h1>Editing Menu</h1>
 
   <form method="POST">
-    {% for hidden_field in form.hidden_fields %}
-      {{ hidden_field.errors }}
-      {{ hidden_field }}
-    {% endfor %}
-    {% csrf_token %}
-    {{ form.management_form }}
-    {{ form.non_form_errors }}
-    {% for menu_section_form in form.forms %}
-      <hr>
-      <span class="d-block p-2 bg-primary text-white">
-        {% if menu_section_form.instance.name %}
-          <h2>Editing Menu Section: {{ menu_section_form.instance.name }}</h2>
-        {% else %}
-          {% if form.forms|length > 1 %}
-            <h2>Add another Menu Section</h2>
-          {% else %}
-            <h2>Add a Menu Section</h2>
-          {% endif %}
-        {% endif %}
-      {% for hidden_field in menu_section_form.hidden_fields %}
-        {{ hidden_field.errors }}
-        {{ hidden_field }}
-      {% endfor %}
-      <div class="form-row">
-        <div class="form-group col-md-11 mb-0">
-          {{ menu_section_form.name|as_crispy_field }}
-        </div>
-        <div class="form-group col mb-0">
-          {{ menu_section_form.order|as_crispy_field }}
-        </div>
-      </div>
-      {{ menu_section_form.description|as_crispy_field }}
-      <div class="form-group mb-2">
-        <button type="submit" class="btn btn-success">Save</button>
-        <span> Delete {{ menu_section_form.DELETE }} </span>
-      </div>
-      {% if menu_section_form.nested %}
-        <h3>Items</h3>
-          {{ menu_section_form.nested.management_form }}
-          {{ menu_section_form.nested.non_form_errors }}
-          {% for menu_item_form in menu_section_form.nested.forms %}
-            <span class="d-block p-2 bg-secondary text-white">
-              {% if menu_item_form.instance.name %}
-                <h5>Editing Menu Item: {{ menu_item_form.instance.name }}</h5>
+    <div class="row">
+      <div class="col-10">
+        {% for hidden_field in form.hidden_fields %}
+          {{ hidden_field.errors }}
+          {{ hidden_field }}
+        {% endfor %}
+        {% csrf_token %}
+        {{ form.management_form }}
+        {{ form.non_form_errors }}
+        {% for menu_section_form in form.forms %}
+          <hr>
+          <span class="d-block p-2" style="background-color: #bddaf2;">
+            {% if menu_section_form.instance.name %}
+              <h2>Editing Menu Section: {{ menu_section_form.instance.name }}</h2>
+            {% else %}
+              {% if form.forms|length > 1 %}
+                <h2>Add another Menu Section</h2>
               {% else %}
-                <h5>Add a Menu Item</h5>
+                <h2>Add a Menu Section</h2>
               {% endif %}
-              {% for hidden_field in menu_item_form.hidden_fields %}
-                {{ hidden_field.errors }}
-                {{ hidden_field }}
-              {% endfor %}
-                <div class="form-group">
-                  <div class="form-row">
-                    <div class="col-10 mb-0">
-                      {{ menu_item_form.name|as_crispy_field }}
+            {% endif %}
+          {% for hidden_field in menu_section_form.hidden_fields %}
+            {{ hidden_field.errors }}
+            {{ hidden_field }}
+          {% endfor %}
+          <div class="form-row">
+            <div class="form-group col-md-11 mb-0">
+              {{ menu_section_form.name|as_crispy_field }}
+            </div>
+            <div class="form-group col mb-0">
+              {{ menu_section_form.order|as_crispy_field }}
+            </div>
+          </div>
+          {{ menu_section_form.description|as_crispy_field }}
+          <div class="form-group mb-2">
+            <span> Delete {{ menu_section_form.DELETE }} </span>
+          </div>
+          {% if menu_section_form.nested %}
+            <h3>Items</h3>
+              {{ menu_section_form.nested.management_form }}
+              {{ menu_section_form.nested.non_form_errors }}
+              {% for menu_item_form in menu_section_form.nested.forms %}
+                <span class="d-block p-2" style="background-color: #bec0c2;">
+                  {% if menu_item_form.instance.name %}
+                    <h5>Editing Menu Item: {{ menu_item_form.instance.name }}</h5>
+                  {% else %}
+                    <h5>Add a Menu Item</h5>
+                  {% endif %}
+                  {% for hidden_field in menu_item_form.hidden_fields %}
+                    {{ hidden_field.errors }}
+                    {{ hidden_field }}
+                  {% endfor %}
+                    <div class="form-group">
+                      <div class="form-row">
+                        <div class="col-9 mb-0">
+                          {{ menu_item_form.name|as_crispy_field }}
+                        </div>
+                        <div class="col-2 mb-0">
+                          {{ menu_item_form.price|as_crispy_field }}
+                        </div>                
+                        <div class="col-1 mb-0">
+                          {{ menu_item_form.order|as_crispy_field }}
+                        </div>
+                      </div>
+                      {{ menu_item_form.description|as_crispy_field }}
+                      <div class="form-group mb-2">
+                        <span> Delete {{ menu_item_form.DELETE }} </span>
+                      </div>
                     </div>
-                    <div class="col mb-0">
-                      {{ menu_item_form.price|as_crispy_field }}
-                    </div>                
-                    <div class="col mb-0">
-                      {{ menu_item_form.order|as_crispy_field }}
-                    </div>
-                  </div>
-                  {{ menu_item_form.description|as_crispy_field }}
-                  <div class="form-group mb-2">
-                    <button type="submit" class="btn btn-success">Save</button>
-                    <span> Delete {{ menu_item_form.DELETE }} </span>
-                  </div>
-                </div>
-              </span>
-            <br>
-            {% endfor %}
-      {% endif %}
-    {% endfor %}
-<br>
-  <p>
-    <button type="submit" class="btn btn-success">Update Menu</button>
-    <a class="btn btn-outline" href="{% url 'menu_gen:index' %}">Cancel</a>
-  </p>
-</form>
-{% endblock %}
+                  </span>
+                <br>
+                {% endfor %}
+          {% endif %}
+        </span>
+        {% endfor %}
+    </form>
+  </div>
+  <div class="col-2">
+    <div class="btn-group-vertical position-fixed">
+      <button type="submit" class="btn btn-lg btn-success">Save Changes</button>
+      <a class="btn btn-lg btn-light" href="{% url 'menu_gen:index' %}">Return</a>
+    </div>
+  </div>
+</div>
+  {% endblock %}
