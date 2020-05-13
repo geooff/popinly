@@ -1,11 +1,27 @@
 {% extends "base_generic.html" %}
+{% load static %}
 
 {% block content %}
   <div class="jumbotron">
   <h1 class="display-4">Design like a pro</h1>
-  <p class="lead">Popinly allows you to design professional menus in seconds to wow your diners. Save time and money designing menus without the use of complex design software</p>
-  <hr class="my-4">
-  <p>Learn more about how Popinly can help your resturaunt excel</p>
-  <a class="btn btn-primary btn-lg" href=# role="button">Learn more</a>
+  <div class="row">
+    <div class="col-6">
+      <p class="lead">Popinly allows you to design professional menus in seconds to wow your diners. Save time and money designing menus without the use of complex design software</p>
+      <ul>
+        <p>💸 Free basic accounts</p>
+        <p>🌶 Upgrade your existing menu in seconds</p>
+        <p>🍷 Support for food and drink menus</p>
+        <p>💻 Export in both PDF and PNG (Coming Soon)</p>
+      </ul>
+      <hr class="my-4">
+      <p>Sign up or log in and get creating</p>
+      <a class="btn btn-primary btn-lg" href="{% url 'register'%}?next={{request.path}}" role="button">Learn more</a>
+    </div>
+    <div class="col-6">
+      <img class="display_menu" src="{% static "images/menu_1.png" %}">
+      <img class="display_menu" src="{% static "images/menu_2.png" %}">
+      <img class="display_menu" src="{% static "images/menu_3.png" %}">
+    </div>
+  </div>
 </div>
 {% endblock %}
