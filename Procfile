@@ -1,1 +1,1 @@
-web: gunicorn popinly.wsgi
+web: gunicorn popinly.popinly.wsgi:app
