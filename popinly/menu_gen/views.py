@@ -2,9 +2,11 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
 from django.urls import reverse, reverse_lazy
+
 
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic import (
@@ -159,7 +161,7 @@ def generate_menu_pdf(request, pk):
     font_config = FontConfiguration()
     user_font = _generate_font_palette(menu)
     user_colour = _generate_colour_palette(menu)
-    with open("static/base_export.scss", "r") as template_css_contents:
+    with open("base_export.scss", "r") as template_css_contents:
         template_css = template_css_contents.read()
 
     css = user_font + user_colour + template_css
