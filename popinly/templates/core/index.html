@@ -6,7 +6,7 @@
   <h1 class="display-4">Design like a pro</h1>
   <div class="row">
     <div class="col-6">
-      <p class="lead">Popinly allows you to design professional menus in seconds to wow your diners. Save time and money designing menus without the use of complex design software</p>
+      <p class="lead">Popinly enables anyone to design professional menus in seconds. Save time and money designing menus without the use of complex design software. Save and export menus to share on social media platforms or print to use in-house</p>
       <ul>
         <p>💸 Free basic accounts</p>
         <p>🌶 Upgrade your existing menu in seconds</p>
@@ -15,7 +15,11 @@
       </ul>
       <hr class="my-4">
       <p>Sign up or log in and get creating</p>
-      <a class="btn btn-primary btn-lg" href="{% url 'register'%}?next={{request.path}}" role="button">Learn more</a>
+      {% if user.is_authenticated %}
+        <a class="btn btn-primary btn-lg" href="{% url 'menu_gen:index' %}" role="button">Start Creating</a>
+      {% else %}
+        <a class="btn btn-primary btn-lg" href="{% url 'register'%}?next={{request.path}}" role="button">Register For Free</a>
+      {% endif %}
     </div>
     <div class="col-6">
       <img class="display_menu" src="{% static "images/menu_1.png" %}">
