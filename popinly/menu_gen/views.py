@@ -1,3 +1,5 @@
+import os
+
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import get_user_model
@@ -161,7 +163,9 @@ def generate_menu_pdf(request, pk):
     font_config = FontConfiguration()
     user_font = _generate_font_palette(menu)
     user_colour = _generate_colour_palette(menu)
-    with open("base_export.scss", "r") as template_css_contents:
+    with open(
+        os.path.join(os.path.dirname(__file__), "./base_export.scss"), "r"
+    ) as template_css_contents:
         template_css = template_css_contents.read()
 
     css = user_font + user_colour + template_css
