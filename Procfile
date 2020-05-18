@@ -1,1 +1,2 @@
-web: gunicorn popinly.popinly.wsgi:app
+web: gunicorn --pythonpath popinly popinly.wsgi
+
