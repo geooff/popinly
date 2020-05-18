@@ -1,5 +1,5 @@
 # Ignore folders
-.env/
+.venv/
 .vscode/
 
 # Ignore this shit
@@ -7,3 +7,9 @@
 
 # Ignore build files
 *.pyc
+
+# Ignore .env file
+.env
+
+# Ignore local development DB
+popinly/db.sqlite3
