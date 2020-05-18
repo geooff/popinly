@@ -20,10 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "dn@6gz2w6&)qi(lus=)j^6uvjc*ub$yjwb3%1p723w**9s7u8&"
+SECRET_KEY = os.environ.get("POPINLY_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -126,3 +126,8 @@ LOGIN_REDIRECT_URL = "/"
 
 # Settings for Crispy Forms
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+# Configure Django App for Heroku.
+import django_heroku
+
+django_heroku.settings(locals())
