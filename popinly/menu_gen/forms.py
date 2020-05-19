@@ -24,7 +24,7 @@ class BaseSectionWithItemsFormset(BaseInlineFormSet):
         orders = []
         for form in self.forms:
             if form.cleaned_data:
-                order = form.cleaned_data.get("order")
+                order = form.cleaned_data.get("order", None)
                 if order in orders:
                     form.add_error(
                         "order", _("The order of each item in a section must be unique")
@@ -103,7 +103,7 @@ class BaseMenuWithSectionFormset(BaseInlineFormSet):
 
             # Validation to ensure that each menu section is unique
             if form.cleaned_data:
-                order = form.cleaned_data["order"]
+                order = form.cleaned_data.get("order", None)
                 if order in orders:
                     form.add_error(
                         "Order",
