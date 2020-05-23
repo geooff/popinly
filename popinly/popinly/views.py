@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse
 from django.views.generic.edit import FormView
-from django.contrib.auth.forms import UserCreationForm
+from .forms import RegistrationForm
 
 
 def index(request):
@@ -9,7 +9,7 @@ def index(request):
 
 class RegisterView(FormView):
     template_name = "registration/register.html"
-    form_class = UserCreationForm
+    form_class = RegistrationForm
 
     def form_valid(self, form):
         form.save()
