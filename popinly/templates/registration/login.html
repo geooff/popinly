@@ -23,10 +23,9 @@
     </table>
     <button class="btn btn-primary" type="submit">Sign in</button>
     {# Assumes you setup the password_reset view in your URLconf #}
-    <button type="button" class="btn btn-link" href="{% url 'password_reset' %}">Lost password?</button>
     <input type="hidden" name="next" value="{{ next }}" />
   </form>
   <br>
+  <p>Forgot Password? <a href="{% url 'password_reset' %}">Password Reset.</a></p>
   <p>Not registered? <a href="{% url 'register' %}">Create an account.</a></p>
-  {% comment %} <button type="button" class="btn btn-link" href="{% url 'register' %}">Create an account</button> {% endcomment %}
 {% endblock %}

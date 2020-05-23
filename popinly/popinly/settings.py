@@ -129,3 +129,18 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # Configure Django App for Heroku.
 django_heroku.settings(locals())
+
+# Set email debug for local
+
+if not os.environ.get("SENDGRID_API_KEY"):
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    EMAIL_HOST = "localhost"
+    EMAIL_PORT = 1025
+else:
+    SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+
+    EMAIL_HOST = "smtp.sendgrid.net"
+    EMAIL_HOST_USER = "apikey"  # this is exactly the value 'apikey'
+    EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
