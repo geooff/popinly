@@ -192,5 +192,6 @@ class ItemModelTests(TestCase):
             for item in section.menuitem_set.all():
                 ordered_tree.append(item)
 
+        # This order is hard coded to test the order logic more
         expected = [self.section, self.item, self.another_item, self.another_section]
         self.assertEqual(ordered_tree, expected)
