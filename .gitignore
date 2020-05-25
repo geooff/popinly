@@ -13,3 +13,6 @@
 
 # Ignore local development DB
 popinly/db.sqlite3
+
+# Ignore static files
+popinly/staticfiles
