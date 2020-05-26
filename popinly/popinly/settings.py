@@ -16,6 +16,10 @@ import os
 import dj_database_url
 import django_heroku
 
+# Sentry integration for global logging
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -144,3 +148,10 @@ else:
     EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
+
+# Sentry logging integration (Heroku Only)
+sentry_sdk.init(
+    dsn=os.environ["SENTRY_DSN"],
+    integrations=[DjangoIntegration()],
+    send_default_pii=True,
+)
