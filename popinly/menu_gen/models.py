@@ -3,7 +3,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+
+from .modelStyle import ColourPalette, ImpactFontPalette, BaseFontPalette
 
 
 class Menu(models.Model):
@@ -15,41 +16,15 @@ class Menu(models.Model):
     )
     created_at = models.DateField(default=timezone.now)
 
-    # TODO: Refactor this out to an external file
-    # Follows format Primary Colour, Secondary Colour, Accent Colour
-    class ColourPalette(models.TextChoices):
-        Formal = "#000000 #000000 #000000", _("Formal")
-        Modern = "#702323 #000000 #702323", _("Modern")
-        Autumn = "#8f741d #000000 #000000", _("Autumn")
-        Fultur = "#1f4027 #0f2113 #1f4037", _("Fultur")
-        Oculum = "#266682 #1d2224 #1d2224", _("Oculum")
-        Salmon = "#000000 #000000 #c75b5d", _("Salmon")
-
     colour_palette = models.CharField(
         max_length=23, choices=ColourPalette.choices, default=ColourPalette.Formal,
     )
-
-    # TODO: Refactor this out to an external file
-    class ImpactFontPalette(models.TextChoices):
-        Formal = "Dancing+Script", _("Danging Script")
-        Modern = "Josefin+Sans", _("Josefin Sans")
-        Autumn = "Reenie+Beanie", _("Reenie Beanie")
-        Fultur = "Nothing+You+Could+Do", _("Nothing You Could Do")
-        Oculum = "Tenor+Sans", _("Tenor Sans")
 
     title_font = models.CharField(
         max_length=31,
         choices=ImpactFontPalette.choices,
         default=ImpactFontPalette.Formal,
     )
-
-    # TODO: Refactor this out to an external file
-    class BaseFontPalette(models.TextChoices):
-        Formal = "Roboto", _("Roboto")
-        Modern = "Lato", _("Lato")
-        Autumn = "Open+Sans", _("Open Sans")
-        Fultur = "Montserrat", _("Montserrat")
-        Oculum = "Source Sans Pro", _("Source Sans Pro")
 
     base_font = models.CharField(
         max_length=31, choices=BaseFontPalette.choices, default=BaseFontPalette.Formal,
