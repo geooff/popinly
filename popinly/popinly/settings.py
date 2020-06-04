@@ -150,8 +150,9 @@ else:
     EMAIL_USE_TLS = True
 
 # Sentry logging integration (Heroku Only)
-sentry_sdk.init(
-    dsn=os.environ["SENTRY_DSN"],
-    integrations=[DjangoIntegration()],
-    send_default_pii=True,
-)
+if os.environ.get("SENTRY_DSN"):
+    sentry_sdk.init(
+        dsn=os.environ["SENTRY_DSN"],
+        integrations=[DjangoIntegration()],
+        send_default_pii=True,
+    )
