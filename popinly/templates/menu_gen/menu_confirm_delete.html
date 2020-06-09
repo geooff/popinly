@@ -3,7 +3,10 @@
 {% block content %}
     <form method="post">
         {% csrf_token %}
-        <p>Are you sure you want to delete "{{ menu }}"?</p>
-        <input type="submit" class="btn btn-outline-danger" value-"Delete">
+        <div class="container">
+            <p>Are you sure you want to delete "{{ menu }}"?</p>
+            <a class="btn btn-outline" href="{% url 'menu_gen:index' %}">Cancel</a>
+            <input type="submit" class="btn btn-outline-danger" value-"Delete">
+        </div>
     </form>
 {% endblock %}
