@@ -1,5 +1,7 @@
 from django.forms.models import BaseInlineFormSet, inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
+from django.forms import ModelForm, Form, ChoiceField, RadioSelect
+
 
 from .utils.forms import is_empty_form, is_form_persisted
 from .models import Menu, MenuSection, MenuItem
@@ -164,3 +166,24 @@ MenuSectionsItemsFormset = inlineformset_factory(
     can_order=False,
     can_delete=True,
 )
+
+
+class WizardRestaurantForm(ModelForm):
+    class Meta:
+        model = Menu
+        fields = ["restaurant_name", "menu_title"]
+
+
+class WizardStyleForm(ModelForm):
+    class Meta:
+        model = Menu
+        fields = ["colour_palette", "title_font", "base_font"]
+
+
+class WizardMenuTypeForm(ModelForm):
+    class Meta:
+        model = Menu
+        fields = ["menu_type"]
+        widgets = {
+            "menu_type": RadioSelect(),
+        }

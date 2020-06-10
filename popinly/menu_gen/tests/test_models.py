@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-from .models import Menu, MenuSection, MenuItem
+from menu_gen.models import Menu, MenuSection, MenuItem
 
 
 class MenuModelTests(TestCase):

@@ -7,10 +7,9 @@
     <table class="table table-hover">
     <thead>
       <tr>
-        <th>Restaurant</th>
         <th>Title</th>
-        <th>Created On</th>
-        <th></th>
+        <th>Restaurant</th>
+        <th>Menu Type</th>
         <th></th>
         <th></th>
         <th></th>
@@ -19,13 +18,15 @@
     <tbody>
     {% for menu in user_menus %}
       <tr>
-        <td>{{ menu.restaurant_name }} </td>
         <td>{{ menu.menu_title }}</td>
-        <td>{{ menu.created_at }}</td>
-        <td><a href="{% url 'menu_gen:detail' menu.uuid %}">View</a></td>
+        <td>{{ menu.restaurant_name }} </td>
+        <td>{{ menu.menu_type }}</td>
         <td><a href="{% url 'menu_gen:edit_meta' menu.uuid %}">Edit Appearance</a></td>
         <td><a href="{% url 'menu_gen:edit' menu.uuid %}">Edit Contents</a></td>
-        <td><a href="{% url 'menu_gen:delete' menu.uuid %}" class="btn btn-danger btn-sm">Delete</button></td>
+        <td><a type="button" href="{% url 'menu_gen:detail' menu.uuid %}" class="btn btn-primary btn-sm" >View</a></td>
+        <td><a type="button" href="{% url 'menu_gen:delete' menu.uuid %}" class="btn btn-danger btn-sm">Delete</a></td>
+          </div>
+        </td>
       </tr>
     {% endfor %}
     </tbody>
@@ -33,6 +34,6 @@
     {% else %}
       <p>No menus available to edit.</p>
     {% endif %}
-      <a href="{% url 'menu_gen:add' %}" class="btn btn-outline-primary">Create a new menu!</a>
+      <a href="{% url 'menu_gen:wizard' %}" class="btn btn-outline-primary">Create a new menu</a>
   {% endif %}
 {% endblock %}
