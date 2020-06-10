@@ -4,13 +4,16 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from .modelStyle import ColourPalette, ImpactFontPalette, BaseFontPalette
+from .modelStyle import MenuType, ColourPalette, ImpactFontPalette, BaseFontPalette
 
 
 class Menu(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     restaurant_name = models.CharField(max_length=200)
+    menu_type = models.CharField(
+        max_length=70, choices=MenuType.choices, default=MenuType.Dinner,
+    )
     menu_title = models.CharField(
         max_length=200, error_messages={"required": "Menu Title is Required"}
     )

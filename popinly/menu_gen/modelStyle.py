@@ -2,6 +2,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+class MenuType(models.TextChoices):
+    Dinner = "Dinner", _("Dinner Menu")
+    # Wine = "Wine", _("Wine Menu")
+
+
 class ColourPalette(models.TextChoices):
     # Follows format Primary Colour, Secondary Colour, Accent Colour
     Formal = "#000000 #000000 #000000", _("Formal")

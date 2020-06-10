@@ -3,7 +3,9 @@ import os
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
@@ -19,7 +21,12 @@ from django.views.generic import (
     DeleteView,
 )
 
-from .forms import MenuSectionsItemsFormset
+from .forms import (
+    MenuSectionsItemsFormset,
+    WizardRestaurantForm,
+    WizardStyleForm,
+    WizardMenuTypeForm,
+)
 from .models import Menu, MenuSection, MenuItem
 from .dynamicStyle import userColourTemplate, userFontTemplate
 
@@ -28,6 +35,8 @@ from weasyprint import HTML, CSS
 from weasyprint.fonts import FontConfiguration
 from django.template.loader import render_to_string
 import tempfile
+
+from formtools.wizard.views import SessionWizardView
 
 
 class MenuListView(LoginRequiredMixin, ListView):
@@ -40,27 +49,6 @@ class MenuListView(LoginRequiredMixin, ListView):
         queryset = super(MenuListView, self).get_queryset()
         queryset = queryset.filter(author__exact=self.request.user)
         return queryset
-
-
-class MenuCreateView(LoginRequiredMixin, CreateView):
-    """
-    Only for creating a new menu. Adding items to it is done in the
-    MenuItemsUpdateView().
-    """
-
-    model = Menu
-    template_name = "menu_gen/menu_add.html"
-    fields = [
-        "restaurant_name",
-        "menu_title",
-    ]
-
-    def get_success_url(self):
-        return reverse("menu_gen:edit", kwargs={"pk": self.object.pk})
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super(MenuCreateView, self).form_valid(form)
 
 
 class MenuEditMeta(LoginRequiredMixin, UpdateView):
@@ -131,6 +119,33 @@ class MenuItemsUpdateView(LoginRequiredMixin, SingleObjectMixin, FormView):
 
     def get_success_url(self):
         return reverse("menu_gen:edit", kwargs={"pk": self.object.pk})
+
+
+class MenuWizard(SessionWizardView):
+    form_list = [WizardMenuTypeForm, WizardRestaurantForm, WizardStyleForm]
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MenuWizard, self).dispatch(*args, **kwargs)
+
+    def get_template_names(self):
+        TEMPLATES = {
+            "0": "menu_gen/menu_wizard_start.html",
+            "1": "menu_gen/menu_wizard.html",
+            "2": "menu_gen/menu_wizard.html",
+        }
+        return [TEMPLATES[self.steps.current]]
+
+    def done(self, form_list, form_dict):
+        # get data from forms
+        menu = Menu(**self.get_all_cleaned_data())
+        menu.author = self.request.user
+        menu.save()
+        return HttpResponseRedirect(reverse("menu_gen:edit", kwargs={"pk": menu.pk}))
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(MenuWizard, self).form_valid(form)
 
 
 def generate_menu_pdf(request, pk):

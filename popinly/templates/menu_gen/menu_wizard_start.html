@@ -1,0 +1,47 @@
+{% extends "base_generic.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}<title>Popinly | Menu Wizard</title>{% endblock %}
+
+{% block head %}
+{{ wizard.form.media }}
+{% endblock %}
+
+{% block content %}
+    <p class="h2">Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+    <hr>
+    <br>
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ wizard.management_form }}
+    <table>
+    <div class="container-fluid">
+        <div class="image_radio">
+            <div class="row justify-content-start">
+            {% for radio in form.menu_type %}
+                <div class="col-3">
+                    <label>
+                        {{ radio.tag }}
+                        {% if radio.choice_label == "Dinner Menu" %}
+                            <img src="{% static 'icons/Fresh Seafood.svg' %}" class="responsive">
+                        {% elif radio.choice_label == "Wine Menu" %}
+                            <img src="{% static 'icons/Beer.svg' %}" class="responsive">
+                        {% else %}
+                            <img src="http://i.stack.imgur.com/FSN1q.png" class="responsive">
+                        {% endif %}
+                        <p class="text-center">{{ radio.choice_label }}</p>
+                    </label>
+                </div>
+                <p class="h4">More coming soon!<p>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    </table>
+    {% if wizard.steps.prev %}
+        <button name="wizard_goto_step" type="submit" class="btn btn-link" value="{{ wizard.steps.prev }}">Previous Step</button>
+    {% endif %}
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+{% endblock %}
