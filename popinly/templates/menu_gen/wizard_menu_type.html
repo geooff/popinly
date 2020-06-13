@@ -9,7 +9,14 @@
 {% endblock %}
 
 {% block content %}
-    <p class="h2">Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+    <div class="d-flex justify-content-between">
+        <div>
+            <p class="h2">Select your menu type</p>
+        </div>
+        <div>
+            <p class="text-right">Step {{ wizard.steps.step1 }} of 4</p>
+        </div>
+    </div>
     <hr>
     <br>
     <form action="" method="post">

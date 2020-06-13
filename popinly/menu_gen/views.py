@@ -130,9 +130,9 @@ class MenuWizard(SessionWizardView):
 
     def get_template_names(self):
         TEMPLATES = {
-            "0": "menu_gen/menu_wizard_start.html",
-            "1": "menu_gen/menu_wizard.html",
-            "2": "menu_gen/menu_wizard.html",
+            "0": "menu_gen/wizard_menu_type.html",
+            "1": "menu_gen/wizard_menu_name.html",
+            "2": "menu_gen/wizard_menu_style.html",
         }
         return [TEMPLATES[self.steps.current]]
 
