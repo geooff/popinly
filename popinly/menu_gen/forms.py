@@ -44,6 +44,11 @@ MenuSectionFormset = inlineformset_factory(
     extra=1,
     can_order=False,
     can_delete=True,
+    labels={
+        "name": _("Item Name"),
+        "description": _("Item Description"),
+        "price": _("Item Price"),
+    },
 )
 
 
@@ -165,6 +170,7 @@ MenuSectionsItemsFormset = inlineformset_factory(
     extra=1,
     can_order=False,
     can_delete=True,
+    labels={"name": _("Section Name"), "description": _("Section Description")},
 )
 
 
