@@ -22,32 +22,13 @@ body {
   width: 100%;
   height: 2.5rem;            /* Footer height */
 }
-
-.display_menu {
-  width: 50%;
-  height: auto;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  z-index: 2;
-  box-shadow: 0 2px 25px 2px rgba(0,0,0,0.2);
-  border-radius: 3px;
-  background: white;
+.carousel {
+  background: #EEE;
 }
 
-.display_menu:first-child {
-  top: 10em;
-  left: -15em;
-  z-index: 3;
-}
-
-.display_menu:last-child {
-  z-index: 1;
-  top: -10em;
-  left: 15em;
+.carousel-cell {
+  display: block;
+  margin-right: 10px;
 }
 
 /* HIDE RADIO */

@@ -22,9 +22,17 @@
       {% endif %}
     </div>
     <div class="col-6">
-      <img class="display_menu" src="{% static "images/menu_1.png" %}">
-      <img class="display_menu" src="{% static "images/menu_2.png" %}">
-      <img class="display_menu" src="{% static "images/menu_3.png" %}">
+      <div class="carousel" data-flickity='{ "imagesLoaded": true, "autoPlay": true, "wrapAround": true}'>
+        <div class="carousel-cell">
+          <img src="{% static "images/menu_1.png" %}">
+        </div>
+        <div class="carousel-cell">
+          <img src="{% static "images/menu_2.png" %}">
+        </div>
+        <div class="carousel-cell">
+          <img src="{% static "images/menu_3.png" %}">
+        </div>
+      </div>
     </div>
   </div>
 </div>
