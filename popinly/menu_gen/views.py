@@ -1,7 +1,7 @@
 import os
 
 from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -148,8 +148,8 @@ class MenuWizard(SessionWizardView):
         return super(MenuWizard, self).form_valid(form)
 
 
-def generate_menu_pdf(request, pk):
-    """Generate pdf."""
+def generate_menu(request, pk, export_format):
+    """Generate menu of format export_format to be returned to user."""
 
     def _generate_colour_palette(menu):
         colours = [x for x in menu.colour_palette.split(" ")]
@@ -183,16 +183,27 @@ def generate_menu_pdf(request, pk):
     ) as template_css_contents:
         template_css = template_css_contents.read()
 
+    # Compile dynamic user styling
     css = user_font + user_colour + template_css
     user_css = sass.compile(string=css)
     css_files = [CSS(string=user_css, font_config=font_config)]
 
     # Generate PDF
-    result = html.write_pdf(stylesheets=css_files, font_config=font_config)
+    if export_format == "pdf":
+        result = html.write_pdf(stylesheets=css_files, font_config=font_config)
+        response = HttpResponse(content_type="application/pdf;")
+    elif export_format == "png":
+        result = html.write_png(stylesheets=css_files, font_config=font_config)
+        response = HttpResponse(content_type="image/png;")
+    else:
+        return HttpResponseNotFound(
+            "<h1>File export type not found {}</h1>".format(export_format)
+        )
 
     # Creating http response
-    response = HttpResponse(content_type="application/pdf;")
-    response["Content-Disposition"] = "inline; filename=menu.pdf"
+    response["Content-Disposition"] = "inline; filename={}.{}".format(
+        menu.menu_title, export_format
+    )
     response["Content-Transfer-Encoding"] = "binary"
     with tempfile.NamedTemporaryFile(delete=True) as output:
         output.write(result)
