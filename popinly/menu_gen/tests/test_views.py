@@ -18,13 +18,11 @@ class MenuListViewTests(TestCase):
         self.user = User.objects.create_user(
             username=self.username, email="jacob@test.com", password=self.password
         )
-        self.user.save()
 
         self.username_two = "jacob_two"
         self.user_two = User.objects.create_user(
             username=self.username_two, email="jacob@test.com", password=self.password
         )
-        self.user_two.save()
 
         self.restaurant_name = "Sample Restaurant {}"
         self.menu_title = "Sample Title {}"
@@ -77,3 +75,104 @@ class MenuListViewTests(TestCase):
         response = self.client.get(reverse("menu_gen:index"))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(response.context["user_menus"]) == 6)
+
+
+class MenuExportTests(TestCase):
+    def setUp(self):
+        """
+        Make dummy menus to be used in later tests
+        """
+        self.username = "jacob"
+        self.password = "top_secret"
+        self.user = User.objects.create_user(
+            username=self.username, email="jacob@test.com", password=self.password
+        )
+
+        self.restaurant_name = "Sample Restaurant"
+        self.menu_title = "Sample Title"
+
+        self.menu = Menu.objects.create(
+            menu_title=self.menu_title,
+            restaurant_name=self.restaurant_name,
+            author=self.user,
+        )
+
+        self.menu_section_dinner = MenuSection.objects.create(
+            menu=self.menu,
+            name="Dinner",
+            description="Tonights Dinner Selection",
+            order=2,
+        )
+
+        self.menu_section_lunch = MenuSection.objects.create(
+            menu=self.menu, name="Lunch", description="Todays Lunch Items", order=1
+        )
+
+        MenuItem.objects.create(
+            section=self.menu_section_dinner,
+            name="spaghetti carbonara",
+            description="double smoked bacon, eggs & parmigiano, cream, southern italian style",
+            price=16,
+            order=1,
+        )
+
+        MenuItem.objects.create(
+            section=self.menu_section_dinner,
+            name="baked ravioli",
+            description="cheese or beef ravioli, in arrabiata sauce topped with crispy prosciutto and mozzarella",
+            price=18.01,
+            order=2,
+        )
+
+        MenuItem.objects.create(
+            section=self.menu_section_dinner,
+            name="tortellini rosé",
+            description="ricotta filled pasta, in a rosé sauce",
+            price=17.00,
+            order=3,
+        )
+
+        MenuItem.objects.create(
+            section=self.menu_section_lunch,
+            name="fettuccine primavera",
+            description="cream, fresh vegetables, parmigiano",
+            price=0,
+            order=1,
+        )
+
+    def test_view_url_exists_at_desired_location(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get("/generator/{}".format(self.menu.uuid))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse("menu_gen:detail", kwargs={"pk": self.menu.uuid})
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse("menu_gen:detail", kwargs={"pk": self.menu.uuid})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "menu_gen/menu_detail.html")
+
+    def test_view_returns_pdf(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse("menu_gen:detail", kwargs={"pk": self.menu.uuid})
+        )
+        self.assertEquals(response.get("Content-Type"), "application/pdf;")
+
+    def test_returned_filename(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse("menu_gen:detail", kwargs={"pk": self.menu.uuid})
+        )
+        self.assertEquals(
+            response.get("Content-Disposition"),
+            "inline; filename={}.pdf".format(self.menu.menu_title),
+        )
