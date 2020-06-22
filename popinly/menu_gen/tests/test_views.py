@@ -166,13 +166,3 @@ class MenuExportTests(TestCase):
             reverse("menu_gen:detail", kwargs={"pk": self.menu.uuid})
         )
         self.assertEquals(response.get("Content-Type"), "application/pdf;")
-
-    def test_returned_filename(self):
-        login = self.client.login(username=self.username, password=self.password)
-        response = self.client.get(
-            reverse("menu_gen:detail", kwargs={"pk": self.menu.uuid})
-        )
-        self.assertEquals(
-            response.get("Content-Disposition"),
-            "inline; filename={}.pdf".format(self.menu.menu_title),
-        )
