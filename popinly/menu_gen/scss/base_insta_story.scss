@@ -1,0 +1,53 @@
+@charset "UTF-8";
+
+@page {
+  size: 1080px 1920px;
+  margin-top: 100px;
+  background-color: white;
+}
+
+html {
+  color: $primary-color;
+  line-height: 1.6; }
+    body {
+      margin: 0; }
+    h1 {
+      color: $primary-color;
+      font-family: $title-font;
+      font-size: 60pt;
+      margin: 0; }
+    aside {
+      display: flex;
+      margin: 2em 0 4em; }
+  table {
+    border-collapse: collapse;
+    width: 100%; }
+    th {
+      border-bottom: .2mm solid $accent-color;
+      width: 103%;
+      color: $secondary-color;
+      font-family: $title-font;
+      font-size: 40pt;
+      font-weight: 400;
+      padding-bottom: .2cm;
+      text-transform: uppercase; }
+    td {
+      padding-top: 3mm; 
+      margin-bottom: 0mm;}
+      #item_title {
+        color: $secondary-color;
+        font-family: $base-font;
+        font-size: 20pt;
+        font-weight: 700;
+        text-align: left;}
+      #item_price {
+        color: $secondary-color;
+        font-family: $base-font;
+        font-size: 20pt;
+        text-align: right;}
+      #item_desc {
+        color: $secondary-color;
+        font-family: $base-font;
+        font-size: 20pt;
+        text-align: left; 
+        padding-top: 0mm;}

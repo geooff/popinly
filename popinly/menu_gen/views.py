@@ -178,8 +178,9 @@ def generate_menu(request, pk, export_format):
     font_config = FontConfiguration()
     user_font = _generate_font_palette(menu)
     user_colour = _generate_colour_palette(menu)
+    scss_paths = {"pdf": "./scss/base_pdf.scss", "png": "./scss/base_insta_story.scss"}
     with open(
-        os.path.join(os.path.dirname(__file__), "./base_export.scss"), "r"
+        os.path.join(os.path.dirname(__file__), scss_paths[export_format]), "r"
     ) as template_css_contents:
         template_css = template_css_contents.read()
 
