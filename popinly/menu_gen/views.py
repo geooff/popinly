@@ -170,6 +170,12 @@ def generate_menu(request, pk, export_format):
     # Model data
     menu = Menu.objects.all().filter(author__exact=request.user).get(pk=pk)
 
+    # Check export type valid
+    if export_format not in ["pdf", "png"]:
+        return HttpResponseNotFound(
+            "<h1>File export type not found {}</h1>".format(export_format)
+        )
+
     # Rendered
     html_string = render_to_string("menu_gen/menu_detail.html", {"menu": menu})
     html = HTML(string=html_string)
@@ -196,10 +202,6 @@ def generate_menu(request, pk, export_format):
     elif export_format == "png":
         result = html.write_png(stylesheets=css_files, font_config=font_config)
         response = HttpResponse(content_type="image/png;")
-    else:
-        return HttpResponseNotFound(
-            "<h1>File export type not found {}</h1>".format(export_format)
-        )
 
     # Creating http response
     response["Content-Disposition"] = "inline; filename={}.{}".format(
