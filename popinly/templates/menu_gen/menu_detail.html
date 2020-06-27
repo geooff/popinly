@@ -16,11 +16,10 @@
         </tr>
       {% endif %}
         {% for item in section.menuitem_set.all %}
-        <tr>
           <tr>
             <td id="item_title">{{ item.name }}</td>
             {% if item.price != 0 %}
-              <td id="item_price">{{ item.price }}</td>
+                <td id="item_price">{{ item.price }}</td>
             {% endif %}
           </tr>
           {% if item.description != "" %}
@@ -28,7 +27,6 @@
               <td id="item_desc">{{ item.description }}</td>
             </tr>
           {% endif %}
-        </tr>
         {% endfor %}
         </table>
         <br>
