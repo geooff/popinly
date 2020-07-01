@@ -176,7 +176,7 @@ def generate_menu(request, pk, export_format):
             "<h1>File export type not found {}</h1>".format(export_format)
         )
 
-    # Rendered
+    # Rendered HTML
     html_string = render_to_string("menu_gen/menu_detail.html", {"menu": menu})
     html = HTML(string=html_string)
 
@@ -200,7 +200,9 @@ def generate_menu(request, pk, export_format):
         result = html.write_pdf(stylesheets=css_files, font_config=font_config)
         response = HttpResponse(content_type="application/pdf;")
     elif export_format == "png":
-        result = html.write_png(stylesheets=css_files, font_config=font_config)
+        # If returning a png, only return the first page, add a notification to user about this later
+        document = html.render(stylesheets=css_files, font_config=font_config)
+        result = document.copy(document.pages[:1]).write_png()[0]
         response = HttpResponse(content_type="image/png;")
 
     # Creating http response
