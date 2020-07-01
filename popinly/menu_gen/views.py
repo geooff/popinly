@@ -1,7 +1,7 @@
 import os
 
 from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -148,8 +148,8 @@ class MenuWizard(SessionWizardView):
         return super(MenuWizard, self).form_valid(form)
 
 
-def generate_menu_pdf(request, pk):
-    """Generate pdf."""
+def generate_menu(request, pk, export_format):
+    """Generate menu of format export_format to be returned to user."""
 
     def _generate_colour_palette(menu):
         colours = [x for x in menu.colour_palette.split(" ")]
@@ -170,7 +170,13 @@ def generate_menu_pdf(request, pk):
     # Model data
     menu = Menu.objects.all().filter(author__exact=request.user).get(pk=pk)
 
-    # Rendered
+    # Check export type valid
+    if export_format not in ["pdf", "png"]:
+        return HttpResponseNotFound(
+            "<h1>File export type not found {}</h1>".format(export_format)
+        )
+
+    # Rendered HTML
     html_string = render_to_string("menu_gen/menu_detail.html", {"menu": menu})
     html = HTML(string=html_string)
 
@@ -178,21 +184,31 @@ def generate_menu_pdf(request, pk):
     font_config = FontConfiguration()
     user_font = _generate_font_palette(menu)
     user_colour = _generate_colour_palette(menu)
+    scss_paths = {"pdf": "./scss/base_pdf.scss", "png": "./scss/base_insta_story.scss"}
     with open(
-        os.path.join(os.path.dirname(__file__), "./base_export.scss"), "r"
+        os.path.join(os.path.dirname(__file__), scss_paths[export_format]), "r"
     ) as template_css_contents:
         template_css = template_css_contents.read()
 
+    # Compile dynamic user styling
     css = user_font + user_colour + template_css
     user_css = sass.compile(string=css)
     css_files = [CSS(string=user_css, font_config=font_config)]
 
     # Generate PDF
-    result = html.write_pdf(stylesheets=css_files, font_config=font_config)
+    if export_format == "pdf":
+        result = html.write_pdf(stylesheets=css_files, font_config=font_config)
+        response = HttpResponse(content_type="application/pdf;")
+    elif export_format == "png":
+        # If returning a png, only return the first page, add a notification to user about this later
+        document = html.render(stylesheets=css_files, font_config=font_config)
+        result = document.copy(document.pages[:1]).write_png()[0]
+        response = HttpResponse(content_type="image/png;")
 
     # Creating http response
-    response = HttpResponse(content_type="application/pdf;")
-    response["Content-Disposition"] = "inline; filename=menu.pdf"
+    response["Content-Disposition"] = "inline; filename={}.{}".format(
+        menu.menu_title, export_format
+    )
     response["Content-Transfer-Encoding"] = "binary"
     with tempfile.NamedTemporaryFile(delete=True) as output:
         output.write(result)

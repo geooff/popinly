@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 
 from menu_gen.models import Menu, MenuSection, MenuItem
 
+import os
+from wand.image import Image
+
 
 class MenuListViewTests(TestCase):
     def setUp(self):
@@ -140,29 +143,134 @@ class MenuExportTests(TestCase):
             order=1,
         )
 
-    def test_view_url_exists_at_desired_location(self):
+    def test_pdf_view_url_exists(self):
         login = self.client.login(username=self.username, password=self.password)
-        response = self.client.get("/generator/{}".format(self.menu.uuid))
+        response = self.client.get("/generator/{}/{}".format("pdf", self.menu.uuid))
         self.assertEqual(response.status_code, 200)
 
-    def test_view_url_accessible_by_name(self):
+    def test_png_view_url_exist(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get("/generator/{}/{}".format("png", self.menu.uuid))
+        self.assertEqual(response.status_code, 200)
+
+    def test_pdf_view_url_accessible_by_name(self):
         login = self.client.login(username=self.username, password=self.password)
         response = self.client.get(
-            reverse("menu_gen:detail", kwargs={"pk": self.menu.uuid})
+            reverse(
+                "menu_gen:detail",
+                kwargs={"pk": self.menu.uuid, "export_format": "pdf"},
+            )
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_view_uses_correct_template(self):
+    def test_png_view_url_accessible_by_name(self):
         login = self.client.login(username=self.username, password=self.password)
         response = self.client.get(
-            reverse("menu_gen:detail", kwargs={"pk": self.menu.uuid})
+            reverse(
+                "menu_gen:detail",
+                kwargs={"pk": self.menu.uuid, "export_format": "png"},
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_inaccessible_by_bad_name(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse(
+                "menu_gen:detail",
+                kwargs={"pk": self.menu.uuid, "export_format": "test123"},
+            )
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_pdf_view_uses_correct_template(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse(
+                "menu_gen:detail",
+                kwargs={"pk": self.menu.uuid, "export_format": "pdf"},
+            )
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "menu_gen/menu_detail.html")
 
-    def test_view_returns_pdf(self):
+    def test_png_view_uses_correct_template(self):
         login = self.client.login(username=self.username, password=self.password)
         response = self.client.get(
-            reverse("menu_gen:detail", kwargs={"pk": self.menu.uuid})
+            reverse(
+                "menu_gen:detail",
+                kwargs={"pk": self.menu.uuid, "export_format": "png"},
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "menu_gen/menu_detail.html")
+
+    def test_pdf_view_returns(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse(
+                "menu_gen:detail", kwargs={"pk": self.menu.uuid, "export_format": "pdf"}
+            )
         )
         self.assertEquals(response.get("Content-Type"), "application/pdf;")
+
+    def test_png_view_returns(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse(
+                "menu_gen:detail", kwargs={"pk": self.menu.uuid, "export_format": "png"}
+            )
+        )
+        self.assertEquals(response.get("Content-Type"), "image/png;")
+
+    def test_pdf_returned_filename(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse(
+                "menu_gen:detail", kwargs={"pk": self.menu.uuid, "export_format": "pdf"}
+            )
+        )
+        self.assertEquals(
+            response.get("Content-Disposition"),
+            "inline; filename={}.pdf".format(self.menu.menu_title),
+        )
+
+    def test_png_returned_filename(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse(
+                "menu_gen:detail", kwargs={"pk": self.menu.uuid, "export_format": "png"}
+            )
+        )
+        self.assertEquals(
+            response.get("Content-Disposition"),
+            "inline; filename={}.png".format(self.menu.menu_title),
+        )
+
+    def test_pdf_matchs_expectated(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse(
+                "menu_gen:detail", kwargs={"pk": self.menu.uuid, "export_format": "pdf"}
+            )
+        )
+        response_img = Image(blob=response, resolution=150)
+        filename = os.path.join(os.path.dirname(__file__), "test_files/sample_pdf.pdf")
+
+        with Image(filename=filename, resolution=150) as expected:
+            diff = response_img.compare(expected, metric="root_mean_square")
+            self.assertLess(diff[1], 0.01)
+
+    def test_png_matchs_expectated(self):
+        login = self.client.login(username=self.username, password=self.password)
+        response = self.client.get(
+            reverse(
+                "menu_gen:detail", kwargs={"pk": self.menu.uuid, "export_format": "png"}
+            )
+        )
+        response_img = Image(blob=response, resolution=150)
+        filename = os.path.join(os.path.dirname(__file__), "test_files/sample_png.png")
+
+        with Image(filename=filename, resolution=150) as expected:
+            diff = response_img.compare(expected, metric="root_mean_square")
+            self.assertLess(diff[1], 0.01)
