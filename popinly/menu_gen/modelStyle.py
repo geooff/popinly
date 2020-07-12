@@ -18,7 +18,7 @@ class ColourPalette(models.TextChoices):
 
 
 class ImpactFontPalette(models.TextChoices):
-    Formal = "Dancing+Script", _("Danging Script")
+    Formal = "Dancing+Script", _("Dancing Script")
     Modern = "Josefin+Sans", _("Josefin Sans")
     Autumn = "Reenie+Beanie", _("Reenie Beanie")
     Fultur = "Nothing+You+Could+Do", _("Nothing You Could Do")
