@@ -1,9 +1,17 @@
 {% extends "base_generic.html" %}
 {% block title %}<title>Menu Generator | Popinly</title>{% endblock %}
-
 {% block content %}
   {% if user.is_authenticated %}
-    <h2>Select a menu to edit.</h2>
+    <div class="container-fluid">
+      <div class="row">
+          <div class="col">
+            <h2>Select a menu to edit.</h2>
+          </div>
+          <div class="col-auto">
+            <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy me a Coffee', '#29abe0', 'I2I41XW93');kofiwidget2.draw();</script> 
+          </div>
+      </div>
+    </div>
     {% if user_menus %}
     <table class="table table-hover">
     <thead>
