@@ -14,17 +14,13 @@ The project currently lives at https://popinly.com. Feel free to inbox me if the
 
 * Export as Instagram Story
 
-* Separated dev and production settings
+* Integrated e-mail password recovery system
+
+* Dynamic nested formes made entirely native in Django
 
 * Bootstrap static files included
 
-* User registration
-
 * HTTPS provided by Heroku
-
-* Procfile for easy deployments
-
-* Separated requirements files
 
 * SQLite by default if no env variable is set
 
