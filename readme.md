@@ -2,6 +2,8 @@
 
 The goal of this project is to provide a minimalistic menu creation app that makes decent looking menus that everyone can use.
 
+The project currently lives at https://popinly.com. Feel free to inbox me if the app is down
+
 ![Home Page](images/screenshot.png "Home Page")
 
 ### Main features
